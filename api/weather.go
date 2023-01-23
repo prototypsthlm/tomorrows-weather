@@ -9,7 +9,7 @@ import (
 )
 
 func GetWeatherReport() {
-	//bukarest lat and long
+	//Bucharest lat and long
 	var lat = "44.4268"
 	var lon = "26.1025"
 	var apiKey = os.Getenv("OPEN_WEATHER_API_KEY")
@@ -19,7 +19,6 @@ func GetWeatherReport() {
 
 	if err != nil {
 		fmt.Print(err.Error())
-		os.Exit(1)
 	}
 
 	responseData, err := io.ReadAll(response.Body)
