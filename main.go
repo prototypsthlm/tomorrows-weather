@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/joho/godotenv"
+	"prototyp.com/tomorrows-weather/api"
+)
 
 func main() {
-  fmt.Println("Hello World")
+	godotenv.Load(".env")
+	fmt.Println("Hello World")
+	api.GetWeatherReport()
 }
