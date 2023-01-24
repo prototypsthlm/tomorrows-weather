@@ -7,6 +7,7 @@ import (
 	_ "image/png"
 	"os"
 	"prototyp.com/tomorrows-weather/api"
+	"prototyp.com/tomorrows-weather/models"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -85,11 +86,11 @@ func Run() {
 	}
 }
 
-func drawClouds(win *pixelgl.Window, sprites []*pixel.Sprite, skyColor color.RGBA) {
+func drawClouds(win *pixelgl.Window, sprites []models.Cloud, skyColor color.RGBA) {
 	for _, sprite := range sprites {
 		//todo: to animate, extend with updated delta-X
-		v := pixel.V(sprite.Picture().Bounds().Center().X, 500)
-		sprite.Draw(win, pixel.IM.Moved(v))
+		v := pixel.V(sprite.Sprite.Picture().Bounds().Center().X, 500)
+		sprite.Sprite.Draw(win, pixel.IM.Moved(v))
 	}
 }
 

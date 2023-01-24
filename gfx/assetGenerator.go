@@ -18,8 +18,8 @@ func generateBackground(dailyForecast models.DailyForecast) color.RGBA {
 	return colornames.Mediumpurple
 }
 
-func generateClouds(dailyForecast models.DailyForecast) (sprites []*pixel.Sprite, animationSpeed float64) {
-	var cloudSprites []*pixel.Sprite
+func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, animationSpeed float64) {
+	var cloudSprites []models.Cloud
 	animationSpeed = 0
 	cloudDensity := dailyForecast.Clouds / 10
 
@@ -33,7 +33,10 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []*pixel.Sprite
 		}
 
 		//todo: rand select position via bounds?
-		cloudSprites = append(cloudSprites, pixel.NewSprite(pic1, pic1.Bounds()))
+		var cloud = models.Cloud{
+			Sprite: pixel.NewSprite(pic1, pic1.Bounds()),
+		}
+		cloudSprites = append(cloudSprites, cloud)
 	}
 
 	//todo: calc animationSpeed based on wind
