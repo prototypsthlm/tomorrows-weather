@@ -77,6 +77,7 @@ func Run() {
 		last = time.Now()
 
 		//drawTwoClouds(delta, delta2, win, sprite, sprite2, skyColor)
+		win.Clear(skyColor)
 		drawClouds(win, clouds, skyColor)
 		//mat = mat.Moved(win.Bounds().Center())
 		//sprite.Draw(win, mat)
@@ -85,7 +86,6 @@ func Run() {
 }
 
 func drawClouds(win *pixelgl.Window, sprites []*pixel.Sprite, skyColor color.RGBA) {
-	win.Clear(skyColor)
 	for _, sprite := range sprites {
 		//todo: to animate, extend with updated delta-X
 		v := pixel.V(sprite.Picture().Bounds().Center().X, 500)

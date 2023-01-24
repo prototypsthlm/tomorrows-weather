@@ -8,6 +8,7 @@ import (
 	"prototyp.com/tomorrows-weather/models"
 	"prototyp.com/tomorrows-weather/utils"
 	"strconv"
+	"time"
 )
 
 func generateBackground(dailyForecast models.DailyForecast) color.RGBA {
@@ -24,6 +25,7 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []*pixel.Sprite
 
 	//todo: 10 cloud assets is probably overkill, shade background color instead?
 	for i := 0; i < cloudDensity; i++ {
+		rand.Seed(time.Now().UnixNano())
 		srcImage := rand.Intn(10-1) + 1
 		pic1, err := loadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
 		if err != nil {
@@ -35,7 +37,7 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []*pixel.Sprite
 	}
 
 	//todo: calc animationSpeed based on wind
-	//todo: should be slight random to create layers
+	//todo: should be slightly random to create layers
 
 	return cloudSprites, animationSpeed
 }
