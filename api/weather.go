@@ -9,10 +9,10 @@ import (
 	"prototyp.com/tomorrows-weather/models"
 )
 
-func GetWeatherReport() models.DailyForecast {
-	//Bucharest lat and long
-	var lat = "44.4268"
-	var lon = "26.1025"
+func GetTomorrowsWeather() models.DailyForecast {
+	//Timișoara  lat and long
+	var lat = "45.7489"
+	var lon = "21.2087"
 	var apiKey = os.Getenv("OPEN_WEATHER_API_KEY")
 	apiURL := "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&units=metric&appid=" + apiKey
 	print(apiURL)
@@ -22,11 +22,10 @@ func GetWeatherReport() models.DailyForecast {
 		fmt.Print(err.Error())
 	}
 
-	var result models.DailyForecast
+	var result models.Forecast
 	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(result.Current)
-	return result
+	return result.Daily[1]
 }
