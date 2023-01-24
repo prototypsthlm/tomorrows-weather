@@ -1,29 +1,33 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
+	"prototyp.com/tomorrows-weather/models"
 )
 
-func GetWeatherReport() {
-	//Bucharest lat and long
-	var lat = "44.4268"
-	var lon = "26.1025"
+func GetTomorrowsWeather() models.DailyForecast {
+	//Timișoara  lat and long
+	var lat = "45.7489"
+	var lon = "21.2087"
 	var apiKey = os.Getenv("OPEN_WEATHER_API_KEY")
-	apiURL := "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey
+	apiURL := "https://api.openweathermap.org/data/3.0/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&units=metric&appid=" + apiKey
 	print(apiURL)
 	response, err := http.Get(apiURL)
 
 	if err != nil {
 		fmt.Print(err.Error())
+		return models.DailyForecast{}
 	}
 
-	responseData, err := io.ReadAll(response.Body)
+	var result models.Forecast
+	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
+		return models.DailyForecast{}
 	}
-	fmt.Println(string(responseData))
+	return result.Daily[1]
 }
