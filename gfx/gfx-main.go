@@ -44,25 +44,32 @@ func Run() {
 	}
 
 	sprite := pixel.NewSprite(pic, pic.Bounds())
+	sprite2 := pixel.NewSprite(pic, pic.Bounds())
 
-	angle := 0.0
+	delta := 0.0
+	delta2 := 0.0
 	last := time.Now()
 
 	win.Clear(colornames.Skyblue)
-	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	//sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
 		last = time.Now()
 
-		angle += 3 * dt
+		delta += 18 * dt
+		delta2 += 36 * dt
 
-		win.Clear(colornames.Skyblue)
+		win.Clear(colornames.Mediumpurple)
 
-		mat := pixel.IM
-		//mat = mat.Rotated(pixel.ZV, angle)
-		mat = mat.Moved(win.Bounds().Center())
-		sprite.Draw(win, mat)
+		//mat := pixel.IM
+		//mat = mat.Rotated(pixel.ZV, delta)
+		v := pixel.V(sprite.Picture().Bounds().Center().X+delta, 500)
+		v2 := pixel.V(sprite.Picture().Bounds().Center().X+delta2, 300)
+		sprite.Draw(win, pixel.IM.Moved(v))
+		sprite2.Draw(win, pixel.IM.Moved(v2))
+		//mat = mat.Moved(win.Bounds().Center())
+		//sprite.Draw(win, mat)
 
 		win.Update()
 	}
