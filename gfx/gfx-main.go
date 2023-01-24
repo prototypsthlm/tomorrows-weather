@@ -2,6 +2,7 @@ package gfx
 
 import (
 	"image"
+	_ "image/gif"
 	_ "image/png"
 	"os"
 	"time"
@@ -37,7 +38,7 @@ func Run() {
 
 	win.SetSmooth(true)
 
-	pic, err := loadPicture("power-to-the-linux.png")
+	pic, err := loadPicture("./assets/svg/clouds.gif")
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +60,7 @@ func Run() {
 		win.Clear(colornames.Skyblue)
 
 		mat := pixel.IM
-		mat = mat.Rotated(pixel.ZV, angle)
+		//mat = mat.Rotated(pixel.ZV, angle)
 		mat = mat.Moved(win.Bounds().Center())
 		sprite.Draw(win, mat)
 
