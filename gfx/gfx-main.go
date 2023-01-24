@@ -55,22 +55,24 @@ func Run() {
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
-		last = time.Now()
-
 		delta += 18 * dt
 		delta2 += 36 * dt
+		last = time.Now()
 
-		win.Clear(colornames.Mediumpurple)
-
-		//mat := pixel.IM
-		//mat = mat.Rotated(pixel.ZV, delta)
-		v := pixel.V(sprite.Picture().Bounds().Center().X+delta, 500)
-		v2 := pixel.V(sprite.Picture().Bounds().Center().X+delta2, 300)
-		sprite.Draw(win, pixel.IM.Moved(v))
-		sprite2.Draw(win, pixel.IM.Moved(v2))
+		drawClouds(delta, delta2, win, sprite, sprite2)
 		//mat = mat.Moved(win.Bounds().Center())
 		//sprite.Draw(win, mat)
-
 		win.Update()
 	}
+}
+
+func drawClouds(delta float64, delta2 float64, win *pixelgl.Window, sprite *pixel.Sprite, sprite2 *pixel.Sprite) {
+	win.Clear(colornames.Mediumpurple)
+
+	//mat := pixel.IM
+	//mat = mat.Rotated(pixel.ZV, delta)
+	v := pixel.V(sprite.Picture().Bounds().Center().X+delta, 500)
+	v2 := pixel.V(sprite.Picture().Bounds().Center().X+delta2, 300)
+	sprite.Draw(win, pixel.IM.Moved(v))
+	sprite2.Draw(win, pixel.IM.Moved(v2))
 }
