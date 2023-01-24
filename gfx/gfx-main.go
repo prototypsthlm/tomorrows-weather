@@ -38,22 +38,30 @@ func Run() {
 
 	win.SetSmooth(true)
 
-	pic, err := loadPicture("./assets/svg/clouds.gif")
+	pic1, err := loadPicture("./assets/svg/cloud1.png")
 	if err != nil {
 		panic(err)
 	}
 
-	sprite := pixel.NewSprite(pic, pic.Bounds())
-	sprite2 := pixel.NewSprite(pic, pic.Bounds())
+	pic2, err := loadPicture("./assets/svg/cloud2.png")
+	if err != nil {
+		panic(err)
+	}
+
+	sprite := pixel.NewSprite(pic1, pic1.Bounds())
+	sprite2 := pixel.NewSprite(pic2, pic2.Bounds())
 
 	delta := 0.0
 	delta2 := 0.0
 	last := time.Now()
 
 	win.Clear(colornames.Skyblue)
-	//sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+
+	//sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	for !win.Closed() {
+
 		dt := time.Since(last).Seconds()
 		delta += 18 * dt
 		delta2 += 36 * dt
