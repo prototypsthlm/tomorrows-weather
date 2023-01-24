@@ -20,12 +20,14 @@ func GetTomorrowsWeather() models.DailyForecast {
 
 	if err != nil {
 		fmt.Print(err.Error())
+		return models.DailyForecast{}
 	}
 
 	var result models.Forecast
 	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		log.Fatal(err)
+		return models.DailyForecast{}
 	}
 	return result.Daily[1]
 }
