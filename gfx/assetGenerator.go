@@ -20,7 +20,7 @@ func generateBackground(dailyForecast models.DailyForecast) color.RGBA {
 
 func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, animationSpeed float64) {
 	var cloudSprites []models.Cloud
-	animationSpeed = 0
+	animationSpeed = 10
 	cloudDensity := dailyForecast.Clouds / 10
 
 	//todo: 10 cloud assets is probably overkill, shade background color instead?
