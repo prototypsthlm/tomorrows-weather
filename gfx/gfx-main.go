@@ -1,6 +1,7 @@
 package gfx
 
 import (
+	"fmt"
 	"image"
 	_ "image/gif"
 	_ "image/png"
@@ -38,12 +39,12 @@ func Run() {
 
 	win.SetSmooth(true)
 
-	pic1, err := loadPicture("./assets/svg/cloud1.png")
+	pic1, err := loadPicture("./assets/clouds/clouds-1.png")
 	if err != nil {
 		panic(err)
 	}
 
-	pic2, err := loadPicture("./assets/svg/cloud2.png")
+	pic2, err := loadPicture("./assets/clouds/clouds-2.png")
 	if err != nil {
 		panic(err)
 	}
@@ -55,10 +56,8 @@ func Run() {
 	delta2 := 0.0
 	last := time.Now()
 
-	win.Clear(colornames.Skyblue)
+	win.Clear(colornames.Lightgray)
 	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
-
-	//sprite2.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	for !win.Closed() {
 
@@ -68,19 +67,32 @@ func Run() {
 		last = time.Now()
 
 		drawClouds(delta, delta2, win, sprite, sprite2)
-		//mat = mat.Moved(win.Bounds().Center())
-		//sprite.Draw(win, mat)
+
 		win.Update()
 	}
 }
 
-func drawClouds(delta float64, delta2 float64, win *pixelgl.Window, sprite *pixel.Sprite, sprite2 *pixel.Sprite) {
-	win.Clear(colornames.Mediumpurple)
+func respawnClouds(pixel.Vec) {
 
-	//mat := pixel.IM
-	//mat = mat.Rotated(pixel.ZV, delta)
+}
+
+func drawClouds(delta float64, delta2 float64, win *pixelgl.Window, sprite *pixel.Sprite, sprite2 *pixel.Sprite) {
+	win.Clear(colornames.Lightslategray)
+
 	v := pixel.V(sprite.Picture().Bounds().Center().X+delta, 500)
-	v2 := pixel.V(sprite.Picture().Bounds().Center().X+delta2, 300)
-	sprite.Draw(win, pixel.IM.Moved(v))
-	sprite2.Draw(win, pixel.IM.Moved(v2))
+
+	winX := win.Bounds().Max.X
+
+	fmt.Println("winX: ", winX)
+
+	if v.X > winX {
+		v2 := pixel.V(-500, -1.5)
+
+		v = pixel.V(v2.X+delta2, v2.Y)
+
+		sprite.Draw(win, pixel.IM.Moved(v))
+		fmt.Printf("%v vector", v)
+	} else {
+		sprite.Draw(win, pixel.IM.Moved(v))
+	}
 }
