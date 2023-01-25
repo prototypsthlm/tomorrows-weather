@@ -7,7 +7,7 @@ import (
 	"prototyp.com/tomorrows-weather/models"
 )
 
-func GetTomorrowsWeather() models.DailyForecast {
+func GetTomorrowsWeather() (tomorrowsWeather models.DailyForecast, currentTime int) {
 	//Timișoara  lat and long
 	var lat = "45.7489"
 	var lon = "21.2087"
@@ -17,14 +17,14 @@ func GetTomorrowsWeather() models.DailyForecast {
 
 	if err != nil {
 		println("err: " + err.Error())
-		return models.DailyForecast{}
+		return models.DailyForecast{}, 0
 	}
 
 	var result models.Forecast
 	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		println("err: " + err.Error())
-		return models.DailyForecast{}
+		return models.DailyForecast{}, 0
 	}
-	return result.Daily[1]
+	return result.Daily[1], result.Current.Dt
 }

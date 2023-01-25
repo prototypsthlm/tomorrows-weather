@@ -1,6 +1,8 @@
 package gfx
 
 import (
+	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/pixelgl"
 	"image"
 	_ "image/gif"
 	_ "image/png"
@@ -8,9 +10,6 @@ import (
 	"prototyp.com/tomorrows-weather/api"
 	"prototyp.com/tomorrows-weather/models"
 	"time"
-
-	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
 )
 
 func loadPicture(path string) (pixel.Picture, error) {
@@ -28,7 +27,7 @@ func loadPicture(path string) (pixel.Picture, error) {
 
 func Run() {
 	//load weather
-	tomorrowsWeather := api.GetTomorrowsWeather()
+	tomorrowsWeather, currentTimeAtLocation := api.GetTomorrowsWeather()
 
 	cfg := pixelgl.WindowConfig{
 		Title:  "Tomorrows Weather",
@@ -41,13 +40,14 @@ func Run() {
 	}
 
 	win.SetSmooth(true)
+	//win.Canvas().SetFragmentShader(shaders.GreyscaleShader)
 
 	delta := 0.0
 	last := time.Now()
 
-	skyColor := generateBackground(tomorrowsWeather)
+	sky := generateSky(tomorrowsWeather, currentTimeAtLocation)
 	clouds, animationSpeed := generateClouds(tomorrowsWeather)
-	win.Clear(skyColor)
+	drawSky(sky, win)
 
 	for !win.Closed() {
 
@@ -56,10 +56,15 @@ func Run() {
 
 		last = time.Now()
 
-		win.Clear(skyColor)
+		drawSky(sky, win)
 		drawClouds(win, clouds, delta)
+
 		win.Update()
 	}
+}
+
+func drawSky(sky *pixel.Sprite, win *pixelgl.Window) {
+	sky.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 }
 
 func drawClouds(win *pixelgl.Window, sprites []models.Cloud, delta float64) {
