@@ -9,7 +9,6 @@ import (
 	"os"
 	"prototyp.com/tomorrows-weather/api"
 	"prototyp.com/tomorrows-weather/models"
-	"prototyp.com/tomorrows-weather/shaders"
 	"time"
 )
 
@@ -41,7 +40,7 @@ func Run() {
 	}
 
 	win.SetSmooth(true)
-	win.Canvas().SetFragmentShader(shaders.GreyscaleShader)
+	//win.Canvas().SetFragmentShader(shaders.GreyscaleShader)
 
 	delta := 0.0
 	last := time.Now()
@@ -58,8 +57,8 @@ func Run() {
 		last = time.Now()
 
 		drawSky(sky, win)
-		//sky.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 		drawClouds(win, clouds, delta)
+
 		win.Update()
 	}
 }
