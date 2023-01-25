@@ -10,5 +10,4 @@ func main() {
 	godotenv.Load(".env")
 	//api.GetTomorrowsWeather()
 	pixelgl.Run(gfx.Run)
-
 }

@@ -2,8 +2,6 @@ package gfx
 
 import (
 	"github.com/faiface/pixel"
-	"golang.org/x/image/colornames"
-	"image/color"
 	"math/rand"
 	"prototyp.com/tomorrows-weather/models"
 	"prototyp.com/tomorrows-weather/utils"
@@ -11,11 +9,41 @@ import (
 	"time"
 )
 
-func generateBackground(dailyForecast models.DailyForecast) color.RGBA {
-	//todo: return color by time of day
-	timeOfForecast := utils.ParseUnixTimestamp(dailyForecast.Dt) //todo: might not be needed? Go with curren time at lat lon instead?
-	println("forecast time: " + timeOfForecast.String())
-	return colornames.Mediumpurple
+// assets generated with https://mdigi.tools/gradient-generator/
+func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) *pixel.Sprite {
+	currentTimeAtLocationAsTime := utils.ParseUnixTimestamp(currentTimeAtLocation)
+	sunset := utils.ParseUnixTimestamp(dailyForecast.Sunset)
+	sunrise := utils.ParseUnixTimestamp(dailyForecast.Sunrise)
+	hoursWithSunlight := sunset.Hour() - sunrise.Hour()
+	println("hours with sunlight: " + strconv.Itoa(hoursWithSunlight))
+	println("current time: " + currentTimeAtLocationAsTime.String())
+
+	//todo: we need to calculate sky based on time of day togehter with sunrise and sunset
+	//todo: cloud density will affect sky color, apply greyscale somehow?
+	currentHour := currentTimeAtLocationAsTime.Hour()
+	if currentHour >= 0 && currentHour < 6 {
+		skyPic, _ := loadPicture("./assets/png/sky/night.png")
+		return pixel.NewSprite(skyPic, skyPic.Bounds())
+		//night
+
+	} else if currentHour >= 6 && currentHour < 9 {
+		//dawn/sunrise
+		skyPic, _ := loadPicture("./assets/png/sky/sunrise.png")
+		return pixel.NewSprite(skyPic, skyPic.Bounds())
+
+	} else if currentHour >= 9 && currentHour < 16 {
+		//midday
+		skyPic, _ := loadPicture("./assets/png/sky/midday.png")
+		return pixel.NewSprite(skyPic, skyPic.Bounds())
+	} else {
+		//sunset
+		skyPic, _ := loadPicture("./assets/png/sky/sunset.png")
+		return pixel.NewSprite(skyPic, skyPic.Bounds())
+	}
+
+	//default
+	skyPic, _ := loadPicture("./assets/png/sky/midday.png")
+	return pixel.NewSprite(skyPic, skyPic.Bounds())
 }
 
 func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, animationSpeed float64) {
