@@ -19,4 +19,5 @@ vendor/
 
 .DS_Store
 .env
+.vscode
 
