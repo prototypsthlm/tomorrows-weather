@@ -1,12 +1,13 @@
 package gfx
 
 import (
-	"github.com/faiface/pixel"
 	"math/rand"
-	"prototyp.com/tomorrows-weather/models"
-	"prototyp.com/tomorrows-weather/utils"
 	"strconv"
 	"time"
+
+	"github.com/faiface/pixel"
+	"prototyp.com/tomorrows-weather/models"
+	"prototyp.com/tomorrows-weather/utils"
 )
 
 // assets generated with https://mdigi.tools/gradient-generator/
