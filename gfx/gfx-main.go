@@ -77,12 +77,15 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 	ptrClouds := *clouds
 
 	for i, cloud := range ptrClouds {
-		if !(cloud.PositionVec.X-(cloud.Sprite.Frame().W()/2) > WINDOW_SIZE) {
+		halfCloudW := cloud.Sprite.Frame().W() / 2
+
+		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
 			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, 100)
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
-			cloud.PositionVec = pixel.V(0-cloud.Sprite.Frame().W()/2, 100)
+			cloud.PositionVec = pixel.V(-halfCloudW, 100)
 		}
+
 		ptrClouds[i] = cloud
 	}
 }
