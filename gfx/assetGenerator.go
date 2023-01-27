@@ -92,11 +92,12 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 		rand.Seed(time.Now().UnixNano())
 		PositionY := float64(rand.Intn(468))
 
-		var cloud = models.Cloud{
+		cloud := models.Cloud{
 			Sprite:         pixel.NewSprite(pic1, pic1.Bounds()),
 			AnimationDelta: animationDelta,
 			PositionVec:    pixel.V(PositionX, PositionY),
 		}
+
 		cloudSprites = append(cloudSprites, cloud)
 	}
 
