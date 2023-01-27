@@ -6,45 +6,69 @@ import (
 	"time"
 
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
+	"golang.org/x/image/colornames"
 	"prototyp.com/tomorrows-weather/models"
 	"prototyp.com/tomorrows-weather/utils"
 )
 
 // assets generated with https://mdigi.tools/gradient-generator/
-func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) *pixel.Sprite {
+func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) *imdraw.IMDraw {
 	currentTimeAtLocationAsTime := utils.ParseUnixTimestamp(currentTimeAtLocation)
 	sunset := utils.ParseUnixTimestamp(dailyForecast.Sunset)
 	sunrise := utils.ParseUnixTimestamp(dailyForecast.Sunrise)
 	hoursWithSunlight := sunset.Hour() - sunrise.Hour()
+
 	println("hours with sunlight: " + strconv.Itoa(hoursWithSunlight))
 	println("current time: " + currentTimeAtLocationAsTime.String())
 
 	//todo: we need to calculate sky based on time of day together with sunrise and sunset
 	//todo: cloud density will affect sky color, apply greyscale somehow?
 	currentHour := currentTimeAtLocationAsTime.Hour()
+
+	// initialize with default value
+	topColor := colornames.Darkblue
+	bottomColor := colornames.Lightblue
+
 	if currentHour >= 0 && currentHour < 6 {
-		skyPic, _ := utils.LoadPicture("./assets/png/sky/night.png")
-		return pixel.NewSprite(skyPic, skyPic.Bounds())
-		//night
-
+		// night
+		topColor = colornames.Darkblue
+		bottomColor = colornames.Darkblue
 	} else if currentHour >= 6 && currentHour < 9 {
-		//dawn/sunrise
-		skyPic, _ := utils.LoadPicture("./assets/png/sky/sunrise.png")
-		return pixel.NewSprite(skyPic, skyPic.Bounds())
-
+		// dawn/sunrise
+		topColor = colornames.Darkblue
+		bottomColor = colornames.Lightblue
 	} else if currentHour >= 9 && currentHour < 16 {
-		//midday
-		skyPic, _ := utils.LoadPicture("./assets/png/sky/midday.png")
-		return pixel.NewSprite(skyPic, skyPic.Bounds())
-	} else {
-		//sunset
-		skyPic, _ := utils.LoadPicture("./assets/png/sky/sunset.png")
-		return pixel.NewSprite(skyPic, skyPic.Bounds())
+		// midday
+		topColor = colornames.Darkblue
+		bottomColor = colornames.Lightblue
+	} else if currentHour >= 11 && currentHour < 23 {
+		// sunset
+		topColor = colornames.Lightblue
+		bottomColor = colornames.Pink
 	}
 
-	//default
-	skyPic, _ := utils.LoadPicture("./assets/png/sky/midday.png")
-	return pixel.NewSprite(skyPic, skyPic.Bounds())
+	imd := imdraw.New(nil)
+
+	// top
+	imd.Color = pixel.RGBAModel.Convert(topColor)
+	imd.Push(pixel.V(0, WINDOW_SIZE))
+
+	// right
+	imd.Color = pixel.RGBAModel.Convert(topColor)
+	imd.Push(pixel.V(WINDOW_SIZE, WINDOW_SIZE))
+
+	// bottom
+	imd.Color = pixel.RGBAModel.Convert(bottomColor)
+	imd.Push(pixel.V(WINDOW_SIZE, 0))
+
+	// left
+	imd.Color = pixel.RGBAModel.Convert(bottomColor)
+	imd.Push(pixel.V(0, 0))
+
+	imd.Polygon(0)
+
+	return imd
 }
 
 func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, windMultiplier float64) {
