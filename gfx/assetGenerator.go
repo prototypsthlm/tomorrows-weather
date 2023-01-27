@@ -60,13 +60,16 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 		if err != nil {
 			panic(err)
 		}
-
+		rand.Seed(time.Now().UnixNano())
 		animationDelta := float64(rand.Intn(10-1) + 1)
+		rand.Seed(time.Now().UnixNano())
+		PositionY := float64(rand.Intn(468))
 		//todo: rand select position via bounds?
 
 		var cloud = models.Cloud{
 			Sprite:         pixel.NewSprite(pic1, pic1.Bounds()),
 			AnimationDelta: animationDelta,
+			PositionY:      PositionY,
 		}
 		cloudSprites = append(cloudSprites, cloud)
 	}
