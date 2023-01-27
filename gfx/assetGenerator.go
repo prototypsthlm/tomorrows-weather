@@ -33,26 +33,19 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 
 	if currentHour >= 0 && currentHour < 6 {
 		// night
-		topColor = colornames.Darkblue
-		bottomColor = colornames.Darkblue
+		return createSkyImage(colornames.Darkblue, colornames.Darkblue)
 	} else if currentHour >= 6 && currentHour < 9 {
 		// dawn/sunrise
-		topColor = colornames.Darkblue
-		bottomColor = colornames.Lightblue
+		return createSkyImage(colornames.Darkblue, colornames.Lightblue)
 	} else if currentHour >= 9 && currentHour < 16 {
 		// midday
-		topColor = colornames.Darkblue
-		bottomColor = colornames.Lightblue
+		return createSkyImage(colornames.Darkblue, colornames.Lightblue)
 	} else if currentHour >= 11 && currentHour < 23 {
 		// sunset
-		topColor = colornames.Lightblue
-		bottomColor = colornames.Pink
+		return createSkyImage(colornames.Lightblue, colornames.Pink)
 	}
-	println(dailyForecast.Clouds)
 
-	imd := createSkyImage(topColor, bottomColor)
-
-	return imd
+	return createSkyImage(topColor, bottomColor)
 }
 
 func createSkyImage(topColor color.RGBA, bottomColor color.RGBA) *imdraw.IMDraw {
