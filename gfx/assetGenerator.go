@@ -79,9 +79,9 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 	//todo: 10 cloud assets is probably overkill, shade background color instead?
 	for i := 0; i < cloudDensity; i++ {
 		rand.Seed(time.Now().UnixNano())
-		//	srcImage := rand.Intn(10-1) + 1
-		pic1, err := utils.LoadPicture("./assets/png/test.png")
-		//pic1, err := utils.LoadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
+		srcImage := rand.Intn(10-1) + 1
+		//pic1, err := utils.LoadPicture("./assets/png/test.png")
+		pic1, err := utils.LoadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
 		if err != nil {
 			panic(err)
 		}
