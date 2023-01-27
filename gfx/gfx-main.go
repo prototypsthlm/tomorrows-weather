@@ -2,13 +2,14 @@ package gfx
 
 import (
 	"fmt"
-	"github.com/go-co-op/gocron"
+
 	_ "image/gif"
 	_ "image/png"
 	"time"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/go-co-op/gocron"
 	"prototyp.com/tomorrows-weather/api"
 	"prototyp.com/tomorrows-weather/models"
 )
@@ -66,7 +67,7 @@ func UpdateWeatherOnInterval() {
 	fmt.Println("Starting cron job to update weather every", updateFrequencyInMinutes, "minutes")
 	s := gocron.NewScheduler(time.UTC)
 
-	s.Every(updateFrequencyInMinutes).Minutes().Do(func() {
+	s.Every(updateFrequencyInMinutes).Seconds().Do(func() {
 		println("updating weather")
 		setCurrentWeatherBasedOnForecast()
 	})
@@ -84,7 +85,7 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		halfCloudW := cloud.Sprite.Frame().W() / 2
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
-			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, 100)
+			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, cloud.PositionVec.Y)
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
 			cloud.PositionVec = pixel.V(-halfCloudW, 100)
@@ -92,4 +93,14 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 
 		ptrClouds[i] = cloud
 	}
+}
+
+//lint:ignore U1000 Ignore unused function temporarily for debugging
+func drawRain(win *pixelgl.Window) {
+	panic("not implemented")
+}
+
+//lint:ignore U1000 Ignore unused function temporarily for debugging
+func drawSnow(win *pixelgl.Window) {
+	panic("not implemented")
 }
