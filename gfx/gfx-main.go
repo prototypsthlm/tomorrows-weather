@@ -62,6 +62,10 @@ func Run() {
 
 		last = time.Now()
 
+		if win.Pressed(pixelgl.KeySpace) {
+			clouds, animationSpeed = generateClouds(tomorrowsWeather)
+		}
+
 		drawSky(win, sky)
 		drawClouds(win, &clouds, dt)
 
