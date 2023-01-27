@@ -50,13 +50,14 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, animationSpeed float64) {
 	var cloudSprites []models.Cloud
 	animationSpeed = 10
-	cloudDensity := dailyForecast.Clouds / 10
+	cloudDensity := 1 //dailyForecast.Clouds / 10
 
 	//todo: 10 cloud assets is probably overkill, shade background color instead?
 	for i := 0; i < cloudDensity; i++ {
 		rand.Seed(time.Now().UnixNano())
 		srcImage := rand.Intn(10-1) + 1
 		pic1, err := loadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
+		// pic1, err := loadPicture("./assets/png/test.png")
 		if err != nil {
 			panic(err)
 		}
@@ -64,12 +65,15 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 		animationDelta := float64(rand.Intn(10-1) + 1)
 		rand.Seed(time.Now().UnixNano())
 		PositionY := float64(rand.Intn(468))
+		PositionX := float64(0)
 		//todo: rand select position via bounds?
 
 		var cloud = models.Cloud{
 			Sprite:         pixel.NewSprite(pic1, pic1.Bounds()),
 			AnimationDelta: animationDelta,
 			PositionY:      PositionY,
+			PositionX:      PositionX,
+			PositionVec:    pixel.Vec{0, PositionY},
 		}
 		cloudSprites = append(cloudSprites, cloud)
 	}

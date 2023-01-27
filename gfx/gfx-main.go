@@ -1,7 +1,6 @@
 package gfx
 
 import (
-	"fmt"
 	"image"
 	_ "image/gif"
 	_ "image/png"
@@ -77,14 +76,12 @@ func drawSky(win *pixelgl.Window, sky *pixel.Sprite) {
 }
 
 func removeClouds(win *pixelgl.Window, clouds *[]models.Cloud) {
-	//ptrClouds := (*clouds)
+	ptrClouds := *clouds
 
-	for _, cloud := range *clouds {
-		if cloud.PositionVec.X > win.Bounds().Max.X {
-			fmt.Printf("cloud out of bounds=%v %f\n", cloud.PositionVec.X, win.Bounds().Max.X)
-
-			// remove or reset clouds X
-			//ptrClouds = append(ptrClouds[:i], ptrClouds[i+1:]...)
+	for i, cloud := range *clouds {
+		if cloud.PositionX > WINDOW_SIZE {
+			cloud.PositionX = 0 - cloud.Sprite.Frame().W()
+			ptrClouds[i] = cloud
 		}
 	}
 }
@@ -93,7 +90,8 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, delta float64) {
 	ptrClouds := *clouds
 
 	for i, cloud := range ptrClouds {
-		cloud.PositionVec = pixel.V(cloud.Sprite.Picture().Bounds().Center().X+delta+cloud.AnimationDelta, cloud.PositionY)
+		cloud.PositionX += 1
+		cloud.PositionVec = pixel.V(cloud.Sprite.Picture().Bounds().Center().X+cloud.AnimationDelta+cloud.PositionX, cloud.PositionY)
 		cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 
 		ptrClouds[i] = cloud
