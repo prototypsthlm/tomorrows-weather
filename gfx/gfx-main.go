@@ -1,10 +1,8 @@
 package gfx
 
 import (
-	"image"
 	_ "image/gif"
 	_ "image/png"
-	"os"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -14,22 +12,6 @@ import (
 )
 
 const WINDOW_SIZE = 468
-
-func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-
-	defer file.Close()
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-
-	return pixel.PictureDataFromImage(img), nil
-}
 
 func Run() {
 	//load weather
@@ -53,8 +35,6 @@ func Run() {
 
 	sky := generateSky(tomorrowsWeather, currentTimeAtLocation)
 	clouds, animationSpeed := generateClouds(tomorrowsWeather)
-
-	drawSky(win, sky)
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()

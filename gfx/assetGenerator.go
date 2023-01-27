@@ -23,27 +23,27 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 	//todo: cloud density will affect sky color, apply greyscale somehow?
 	currentHour := currentTimeAtLocationAsTime.Hour()
 	if currentHour >= 0 && currentHour < 6 {
-		skyPic, _ := loadPicture("./assets/png/sky/night.png")
+		skyPic, _ := utils.LoadPicture("./assets/png/sky/night.png")
 		return pixel.NewSprite(skyPic, skyPic.Bounds())
 		//night
 
 	} else if currentHour >= 6 && currentHour < 9 {
 		//dawn/sunrise
-		skyPic, _ := loadPicture("./assets/png/sky/sunrise.png")
+		skyPic, _ := utils.LoadPicture("./assets/png/sky/sunrise.png")
 		return pixel.NewSprite(skyPic, skyPic.Bounds())
 
 	} else if currentHour >= 9 && currentHour < 16 {
 		//midday
-		skyPic, _ := loadPicture("./assets/png/sky/midday.png")
+		skyPic, _ := utils.LoadPicture("./assets/png/sky/midday.png")
 		return pixel.NewSprite(skyPic, skyPic.Bounds())
 	} else {
 		//sunset
-		skyPic, _ := loadPicture("./assets/png/sky/sunset.png")
+		skyPic, _ := utils.LoadPicture("./assets/png/sky/sunset.png")
 		return pixel.NewSprite(skyPic, skyPic.Bounds())
 	}
 
 	//default
-	skyPic, _ := loadPicture("./assets/png/sky/midday.png")
+	skyPic, _ := utils.LoadPicture("./assets/png/sky/midday.png")
 	return pixel.NewSprite(skyPic, skyPic.Bounds())
 }
 
@@ -56,8 +56,8 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 	for i := 0; i < cloudDensity; i++ {
 		rand.Seed(time.Now().UnixNano())
 		srcImage := rand.Intn(10-1) + 1
-		pic1, err := loadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
-		// pic1, err := loadPicture("./assets/png/test.png")
+		pic1, err := utils.LoadPicture("./assets/png/clouds/" + strconv.Itoa(srcImage) + ".png")
+		// pic1, err := utils.LoadPicture("./assets/png/test.png")
 		if err != nil {
 			panic(err)
 		}
