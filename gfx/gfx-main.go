@@ -90,7 +90,7 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		halfCloudW := cloud.Sprite.Frame().W() / 2
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
-			newPositionX := cloud.PositionVec.X + 100*dt
+			newPositionX := cloud.PositionVec.X + 10*dt
 			cloud.PositionVec = pixel.V(newPositionX, cloud.PositionVec.Y)
 
 			mat := pixel.IM
@@ -108,18 +108,17 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 	}
 }
 
-//lint:ignore U1000 Ignore unused function temporarily for debugging
 func drawRain(win *pixelgl.Window, dt float64) {
 	imd := imdraw.New(nil)
 
 	for i := 1; i <= 10; i++ {
 		imd.Color = pixel.RGBAModel.Convert(colornames.White)
-		imd.Push(pixel.V(float64(i*10), 10))
+		imd.Push(pixel.V(float64(i*10), WINDOW_SIZE-10))
 
 		imd.Color = pixel.RGBAModel.Convert(pixel.Alpha(0))
-		imd.Push(pixel.V(float64(i*10), 38))
+		imd.Push(pixel.V(float64(i*10), WINDOW_SIZE-38))
 
-		imd.Polygon(2)
+		imd.Polygon(1)
 
 		imd.Draw(win)
 	}

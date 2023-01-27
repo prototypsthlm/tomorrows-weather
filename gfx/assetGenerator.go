@@ -33,7 +33,7 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 
 	if currentHour >= 0 && currentHour < 6 {
 		// night
-		return createSkyImage(colornames.Darkblue, colornames.Darkblue)
+		return createSkyImage(colornames.Darkblue, colornames.Grey)
 	} else if currentHour >= 6 && currentHour < 9 {
 		// dawn/sunrise
 		return createSkyImage(colornames.Darkblue, colornames.Lightblue)
@@ -42,7 +42,7 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 		return createSkyImage(colornames.Darkblue, colornames.Lightblue)
 	} else if currentHour >= 11 && currentHour < 23 {
 		// sunset
-		return createSkyImage(colornames.Lightblue, colornames.Pink)
+		return createSkyImage(colornames.Darkblue, colornames.Pink)
 	}
 
 	return createSkyImage(topColor, bottomColor)
