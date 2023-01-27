@@ -67,7 +67,7 @@ func UpdateWeatherOnInterval() {
 	fmt.Println("Starting cron job to update weather every", updateFrequencyInMinutes, "minutes")
 	s := gocron.NewScheduler(time.UTC)
 
-	s.Every(updateFrequencyInMinutes).Seconds().Do(func() {
+	s.Every(updateFrequencyInMinutes).Minutes().Do(func() {
 		println("updating weather")
 		setCurrentWeatherBasedOnForecast()
 	})
