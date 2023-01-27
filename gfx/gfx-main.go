@@ -1,6 +1,8 @@
 package gfx
 
 import (
+	"fmt"
+	"github.com/go-co-op/gocron"
 	_ "image/gif"
 	_ "image/png"
 	"time"
@@ -13,10 +15,15 @@ import (
 
 const WINDOW_SIZE = 468
 
-func Run() {
-	//load weather
-	tomorrowsWeather, currentTimeAtLocation := api.GetTomorrowsWeather()
+var tomorrowsWeather models.DailyForecast
+var currentTimeAtLocation int
 
+func setCurrentWeatherBasedOnForecast() {
+	tomorrowsWeather, currentTimeAtLocation = api.GetTomorrowsWeather()
+}
+
+func Run() {
+	setCurrentWeatherBasedOnForecast() //init weather
 	cfg := pixelgl.WindowConfig{
 		Title:  "Tomorrows Weather",
 		Bounds: pixel.R(0, 0, WINDOW_SIZE, WINDOW_SIZE),
@@ -33,6 +40,7 @@ func Run() {
 	delta := 0.0
 	last := time.Now()
 
+	UpdateWeatherOnInterval() //start scheduled job to update weather
 	sky := generateSky(tomorrowsWeather, currentTimeAtLocation)
 	clouds, animationSpeed := generateClouds(tomorrowsWeather)
 
@@ -51,6 +59,18 @@ func Run() {
 
 		win.Update()
 	}
+}
+
+func UpdateWeatherOnInterval() {
+	updateFrequencyInMinutes := 10
+	fmt.Println("Starting cron job to update weather every", updateFrequencyInMinutes, "minutes")
+	s := gocron.NewScheduler(time.UTC)
+
+	s.Every(updateFrequencyInMinutes).Minutes().Do(func() {
+		println("updating weather")
+		setCurrentWeatherBasedOnForecast()
+	})
+	s.StartAsync()
 }
 
 func drawSky(win *pixelgl.Window, sky *pixel.Sprite) {
