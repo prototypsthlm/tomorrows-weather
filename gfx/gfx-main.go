@@ -2,6 +2,7 @@ package gfx
 
 import (
 	"fmt"
+	"math/rand"
 
 	_ "image/gif"
 	_ "image/png"
@@ -44,16 +45,16 @@ func Run() {
 
 	UpdateWeatherOnInterval() //start scheduled job to update weather
 	sky := generateSky(tomorrowsWeather, currentTimeAtLocation)
-	clouds, animationSpeed := generateClouds(tomorrowsWeather)
+	clouds, windMultiplier := generateClouds(tomorrowsWeather)
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
-		delta += animationSpeed * dt
+		delta += windMultiplier * dt
 
 		last = time.Now()
 
 		if win.Pressed(pixelgl.KeySpace) {
-			clouds, animationSpeed = generateClouds(tomorrowsWeather)
+			clouds, windMultiplier = generateClouds(tomorrowsWeather)
 		}
 
 		drawSky(win, sky)
@@ -87,11 +88,13 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		halfCloudW := cloud.Sprite.Frame().W() / 2
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
-			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, cloud.PositionVec.Y)
-			cloud.PositionVec.Scaled(1)
+			newXPosition := cloud.PositionVec.X + 100*dt
+			cloud.PositionVec = pixel.V(newXPosition, cloud.PositionVec.Y)
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
-			cloud.PositionVec = pixel.V(-halfCloudW, 100)
+			rand.Seed(time.Now().UnixNano())
+			newYPosition := float64(rand.Intn(468))
+			cloud.PositionVec = pixel.V(-halfCloudW, newYPosition)
 		}
 
 		ptrClouds[i] = cloud
