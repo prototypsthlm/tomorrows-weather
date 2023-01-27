@@ -47,7 +47,6 @@ func Run() {
 	}
 
 	win.SetSmooth(true)
-	//win.Canvas().SetFragmentShader(shaders.GreyscaleShader)
 
 	delta := 0.0
 	last := time.Now()
@@ -64,8 +63,7 @@ func Run() {
 		last = time.Now()
 
 		drawSky(win, sky)
-		drawClouds(win, &clouds, delta)
-		removeClouds(win, &clouds)
+		drawClouds(win, &clouds, dt)
 
 		win.Update()
 	}
@@ -75,25 +73,16 @@ func drawSky(win *pixelgl.Window, sky *pixel.Sprite) {
 	sky.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 }
 
-func removeClouds(win *pixelgl.Window, clouds *[]models.Cloud) {
-	ptrClouds := *clouds
-
-	for i, cloud := range *clouds {
-		if cloud.PositionX > WINDOW_SIZE {
-			cloud.PositionX = 0 - cloud.Sprite.Frame().W()
-			ptrClouds[i] = cloud
-		}
-	}
-}
-
-func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, delta float64) {
+func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 	ptrClouds := *clouds
 
 	for i, cloud := range ptrClouds {
-		cloud.PositionX += 1
-		cloud.PositionVec = pixel.V(cloud.Sprite.Picture().Bounds().Center().X+cloud.AnimationDelta+cloud.PositionX, cloud.PositionY)
-		cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
-
+		if !(cloud.PositionVec.X-(cloud.Sprite.Frame().W()/2) > WINDOW_SIZE) {
+			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, 100)
+			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
+		} else {
+			cloud.PositionVec = pixel.V(0-cloud.Sprite.Frame().W()/2, 100)
+		}
 		ptrClouds[i] = cloud
 	}
 }

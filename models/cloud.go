@@ -7,5 +7,4 @@ type Cloud struct {
 	PositionVec    pixel.Vec     //current position to render
 	AnimationDelta float64
 	PositionY      float64 //rand float for dynamic animations
-	PositionX      float64
 }
