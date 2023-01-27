@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/go-co-op/gocron"
 	"prototyp.com/tomorrows-weather/api"
@@ -56,6 +57,7 @@ func Run() {
 		}
 
 		drawSky(win, sky)
+
 		drawClouds(win, &clouds, dt)
 
 		win.Update()
@@ -74,8 +76,8 @@ func UpdateWeatherOnInterval() {
 	s.StartAsync()
 }
 
-func drawSky(win *pixelgl.Window, sky *pixel.Sprite) {
-	sky.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+func drawSky(win *pixelgl.Window, sky *imdraw.IMDraw) {
+	sky.Draw(win)
 }
 
 func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
@@ -86,6 +88,7 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
 			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, cloud.PositionVec.Y)
+			cloud.PositionVec.Scaled(1)
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
 			cloud.PositionVec = pixel.V(-halfCloudW, 100)
