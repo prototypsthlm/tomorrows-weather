@@ -2,6 +2,7 @@ package gfx
 
 import (
 	"fmt"
+	"math/rand"
 
 	_ "image/gif"
 	_ "image/png"
@@ -87,9 +88,12 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
 			newXPosition := cloud.PositionVec.X + 100*dt
 			cloud.PositionVec = pixel.V(newXPosition, cloud.PositionVec.Y)
+
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
-			cloud.PositionVec = pixel.V(-halfCloudW, 100)
+			rand.Seed(time.Now().UnixNano())
+			newYPosition := float64(rand.Intn(468))
+			cloud.PositionVec = pixel.V(-halfCloudW, newYPosition)
 		}
 
 		ptrClouds[i] = cloud
