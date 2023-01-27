@@ -12,6 +12,7 @@ import (
 	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/go-co-op/gocron"
+	"golang.org/x/image/colornames"
 	"prototyp.com/tomorrows-weather/api"
 	"prototyp.com/tomorrows-weather/models"
 )
@@ -60,6 +61,7 @@ func Run() {
 		drawSky(win, sky)
 
 		drawClouds(win, &clouds, dt)
+		drawRain(win, dt)
 
 		win.Update()
 	}
@@ -88,13 +90,18 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		halfCloudW := cloud.Sprite.Frame().W() / 2
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
-			newXPosition := cloud.PositionVec.X + 100*dt
-			cloud.PositionVec = pixel.V(newXPosition, cloud.PositionVec.Y)
-			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
+			newPositionX := cloud.PositionVec.X + 100*dt
+			cloud.PositionVec = pixel.V(newPositionX, cloud.PositionVec.Y)
+
+			mat := pixel.IM
+			mat = mat.Scaled(pixel.V(newPositionX, cloud.PositionVec.Y), cloud.ScaleFactor)
+			mat = mat.Moved(cloud.PositionVec)
+
+			cloud.Sprite.Draw(win, mat)
 		} else {
 			rand.Seed(time.Now().UnixNano())
-			newYPosition := float64(rand.Intn(468))
-			cloud.PositionVec = pixel.V(-halfCloudW, newYPosition)
+			newPositionY := float64(rand.Intn(468))
+			cloud.PositionVec = pixel.V(-halfCloudW, newPositionY)
 		}
 
 		ptrClouds[i] = cloud
@@ -102,8 +109,21 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
-func drawRain(win *pixelgl.Window) {
-	panic("not implemented")
+func drawRain(win *pixelgl.Window, dt float64) {
+	imd := imdraw.New(nil)
+
+	for i := 1; i <= 10; i++ {
+		imd.Color = pixel.RGBAModel.Convert(colornames.White)
+		imd.Push(pixel.V(float64(i*10), 10))
+
+		imd.Color = pixel.RGBAModel.Convert(pixel.Alpha(0))
+		imd.Push(pixel.V(float64(i*10), 38))
+
+		imd.Polygon(2)
+
+		imd.Draw(win)
+	}
+
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
