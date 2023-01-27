@@ -1,6 +1,7 @@
 package gfx
 
 import (
+	"image/color"
 	"math/rand"
 	"strconv"
 	"time"
@@ -47,7 +48,14 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 		topColor = colornames.Lightblue
 		bottomColor = colornames.Pink
 	}
+	println(dailyForecast.Clouds)
 
+	imd := createSkyImage(topColor, bottomColor)
+
+	return imd
+}
+
+func createSkyImage(topColor color.RGBA, bottomColor color.RGBA) *imdraw.IMDraw {
 	imd := imdraw.New(nil)
 
 	// top
@@ -67,7 +75,6 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 	imd.Push(pixel.V(0, 0))
 
 	imd.Polygon(0)
-
 	return imd
 }
 
