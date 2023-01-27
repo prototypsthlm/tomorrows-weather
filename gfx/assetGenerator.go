@@ -88,7 +88,7 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 		rand.Seed(time.Now().UnixNano())
 		animationDelta := float64(rand.Intn(10-1) + 1)
 		rand.Seed(time.Now().UnixNano())
-		PositionX := float64(rand.Intn(468))
+		PositionX := float64(rand.Intn(rand.Intn(1500-1) + 1))
 		rand.Seed(time.Now().UnixNano())
 		PositionY := float64(rand.Intn(468))
 
