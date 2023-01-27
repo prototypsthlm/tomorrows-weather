@@ -61,7 +61,7 @@ func Run() {
 		drawSky(win, sky)
 
 		drawClouds(win, &clouds, dt)
-		drawRain(win, dt)
+		// drawRain(win, dt)
 
 		win.Update()
 	}
@@ -108,10 +108,11 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 	}
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func drawRain(win *pixelgl.Window, dt float64) {
 	imd := imdraw.New(nil)
 
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= 100; i++ {
 		imd.Color = pixel.RGBAModel.Convert(colornames.White)
 		imd.Push(pixel.V(float64(i*10), WINDOW_SIZE-10))
 
@@ -122,7 +123,6 @@ func drawRain(win *pixelgl.Window, dt float64) {
 
 		imd.Draw(win)
 	}
-
 }
 
 //lint:ignore U1000 Ignore unused function temporarily for debugging
