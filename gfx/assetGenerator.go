@@ -96,7 +96,7 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 			Sprite:         pixel.NewSprite(pic1, pic1.Bounds()),
 			AnimationDelta: animationDelta,
 			PositionVec:    pixel.V(PositionX, PositionY),
-			ScaleFactor:    0.1 + rand.Float64()*(1-0.1),
+			ScaleFactor:    0.1 + rand.Float64()*(1-0.3),
 		}
 
 		cloudSprites = append(cloudSprites, cloud)
