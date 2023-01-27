@@ -47,9 +47,9 @@ func generateSky(dailyForecast models.DailyForecast, currentTimeAtLocation int) 
 	return pixel.NewSprite(skyPic, skyPic.Bounds())
 }
 
-func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, animationSpeed float64) {
+func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud, windMultiplier float64) {
 	var cloudSprites []models.Cloud
-	animationSpeed = calculateAnimationSpeedBasedOnWind(dailyForecast)
+	windMultiplier = calculateAnimationSpeedBasedOnWind(dailyForecast)
 	cloudDensity := dailyForecast.Clouds / 10
 
 	//todo: 10 cloud assets is probably overkill, shade background color instead?
@@ -75,7 +75,7 @@ func generateClouds(dailyForecast models.DailyForecast) (sprites []models.Cloud,
 		cloudSprites = append(cloudSprites, cloud)
 	}
 
-	return cloudSprites, animationSpeed
+	return cloudSprites, windMultiplier
 }
 
 func calculateAnimationSpeedBasedOnWind(forecast models.DailyForecast) float64 {

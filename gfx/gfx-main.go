@@ -43,16 +43,16 @@ func Run() {
 
 	UpdateWeatherOnInterval() //start scheduled job to update weather
 	sky := generateSky(tomorrowsWeather, currentTimeAtLocation)
-	clouds, animationSpeed := generateClouds(tomorrowsWeather)
+	clouds, windMultiplier := generateClouds(tomorrowsWeather)
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
-		delta += animationSpeed * dt
+		delta += windMultiplier * dt
 
 		last = time.Now()
 
 		if win.Pressed(pixelgl.KeySpace) {
-			clouds, animationSpeed = generateClouds(tomorrowsWeather)
+			clouds, windMultiplier = generateClouds(tomorrowsWeather)
 		}
 
 		drawSky(win, sky)
