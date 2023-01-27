@@ -85,7 +85,8 @@ func drawClouds(win *pixelgl.Window, clouds *[]models.Cloud, dt float64) {
 		halfCloudW := cloud.Sprite.Frame().W() / 2
 
 		if !(cloud.PositionVec.X-(halfCloudW) > win.Bounds().W()) {
-			cloud.PositionVec = pixel.V(cloud.PositionVec.X+100*dt, cloud.PositionVec.Y)
+			newXPosition := cloud.PositionVec.X + 100*dt
+			cloud.PositionVec = pixel.V(newXPosition, cloud.PositionVec.Y)
 			cloud.Sprite.Draw(win, pixel.IM.Moved(cloud.PositionVec))
 		} else {
 			cloud.PositionVec = pixel.V(-halfCloudW, 100)
