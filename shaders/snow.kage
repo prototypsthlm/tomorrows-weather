@@ -1,0 +1,50 @@
+//go:build ignore
+
+package shaders
+
+var (
+  Time   float
+  Depth  float
+  Width  float
+  Speed  float
+  Amount float
+)
+
+func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
+	p := mat3(
+    13.323122,
+    23.5112,
+    21.71123,
+    21.1212,
+    28.7312,
+    11.9312,
+    21.8112,
+    14.7212,
+    61.3934,
+  );
+
+  origin, size := imageDstRegionOnTexture()
+  uv := (position.xy / imageDstTextureSize()) - origin / size
+  acc := vec3(0.0)
+  dof := 5.0 * sin(Time * 0.2)
+
+  for i := 0; i <= 1024; i++ {
+    if i == int(Amount) {
+      break
+    }
+		fi := float(i);
+		q := uv * (1.0 + fi * Depth)
+		q += vec2(q.y * (Width * mod(fi * 7.238917, 1.0) - Width * 0.5), - (Speed * Time / (1.0 + fi * Depth * 0.03)))
+		n := vec3(floor(q), 31.189 + fi)
+		m := vec3(floor(n) * 0.00001 + fract(n))
+		mp := (31415.9 + m) / fract(p*m)
+		r := vec3(fract(mp))
+		s := vec2(abs(mod(q, 1.0) - 0.5 + 0.9 * r.xy - 0.45))
+		s += vec2(0.01 * abs(2.0 * fract(10.0 * q.yx) - 1.0))
+		d := 0.6 * max(s.x - s.y, s.x + s.y) + max(s.x, s.y) - 0.01
+		edge := 0.005 + 0.05 * min(0.5 * abs(fi - 5.0 - dof), 1.0)
+		acc += vec3(smoothstep(edge, -edge, d) * (r.x / (1.0 + 0.02 * fi * Depth)))
+	}
+
+  return vec4(vec3(acc), 1.0)
+}

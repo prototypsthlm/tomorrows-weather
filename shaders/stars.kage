@@ -1,0 +1,39 @@
+//go:build ignore
+
+package shaders
+
+var (
+  Time float
+)
+
+func randVector(vec vec2, seed float) vec2 {
+  return vec2(fract(sin(vec.x * 999.9 + vec.y) * seed), fract(sin(vec.y * 999.9 + vec.x) * seed));
+}
+
+func drawStars(fragColor vec4, color vec4, uv vec2, grid float, size float, speed vec2, seed float) vec4 {
+  uv += Time * speed;  
+  local := vec2(mod(uv, grid) / grid);
+  randv := vec2(randVector(floor(uv / grid), seed) - 0.5);
+  len := length(randv);
+  if (len < 0.5) {
+    radius := 1.0 - distance(local, vec2(0.5, 0.5) + randv) / (size * (0.5 - len));
+    if radius > 0.0 {
+      fragColor += color*radius;
+    }
+  }
+  return fragColor;
+}
+
+func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
+  _Star1Color := vec4(1, 0.94, 0.72, 0.7);
+  _Star2Color := vec4(0.18, 0.03, 0.41, 0.7);
+  _Star3Color := vec4(0.63, 0.50, 0.81, 0.7);
+  _Grid := 40.0;
+  _Size := 0.15;
+  _Speed := vec2(0, 3);
+  fragColor := vec4(0,0,0,0);
+  fragColor = drawStars(fragColor, _Star1Color, texCoord.xy, _Grid, _Size, _Speed, 123456.789);
+  fragColor = drawStars(fragColor, _Star2Color, texCoord.xy, _Grid * 2.0 / 3.0, _Size, _Speed / 1.2, 345678.912);
+  fragColor = drawStars(fragColor, _Star3Color, texCoord.xy, _Grid / 2.0, _Size * 3.0 / 4.0, _Speed / 1.6, 567891.234);
+  return fragColor;
+}
