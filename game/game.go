@@ -45,21 +45,25 @@ func (game *Game) init() {
 	defer func() {
 		game.inited = true
 	}()
-	game.forecast, game.timezone = api.GetForecast(lon, lat)
+	forecast, timezone := api.GetForecast(lon, lat)
+	game.forecast = forecast
+	game.timezone = timezone
 	game.location, _ = time.LoadLocation(game.timezone)
+
+	weatherId := config.DefaultWeatherId
+	if len(game.forecast.Weather) > 0 {
+		weatherId = game.forecast.Weather[0].ID
+	}
+
 	game.sprites.clouds.Num,
 		game.sprites.raindrops.Num,
 		game.snowAmount,
 		game.skySaturation,
 		game.skyBrightness =
-		utils.WeatherConditionIdToConfig(
-			game.forecast.Weather[0].ID,
-		)
+		utils.WeatherConditionIdToConfig(weatherId)
+
+	game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
 	game.lastWeatherUpdate = time.Now()
-	game.skyImage = utils.DrawSky(
-		game.SkyTexture,
-		game.location,
-	)
 	game.sprites.clouds.Clouds = make(
 		[]*sprites.Cloud,
 		config.MaxClouds,
@@ -102,16 +106,22 @@ func (game *Game) Update() error {
 	if game.lastWeatherUpdate.Before(
 		time.Now().Add(config.UpdateWeatherInterval),
 	) {
-		game.forecast, game.timezone = api.GetForecast(lon, lat)
+		forecast, timezone := api.GetForecast(lon, lat)
+		game.forecast = forecast
+		game.timezone = timezone
 		game.location, _ = time.LoadLocation(game.timezone)
+
+		weatherId := config.DefaultWeatherId
+		if len(game.forecast.Weather) > 0 {
+			weatherId = game.forecast.Weather[0].ID
+		}
+
 		game.sprites.clouds.Num,
 			game.sprites.raindrops.Num,
 			game.snowAmount,
 			game.skySaturation,
 			game.skyBrightness =
-			utils.WeatherConditionIdToConfig(
-				game.forecast.Weather[0].ID,
-			)
+			utils.WeatherConditionIdToConfig(weatherId)
 		game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
 		game.lastWeatherUpdate = time.Now()
 	}
@@ -171,7 +181,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		screen,
 		fmt.Sprintf(
 			"code=%d tps=%f fps=%f",
-			game.forecast.Weather[0].ID,
+			500,
 			ebiten.ActualTPS(),
 			ebiten.ActualFPS(),
 		),

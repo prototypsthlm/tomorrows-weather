@@ -16,9 +16,7 @@ func GetForecast(lon, lat float64) (forecast models.DailyForecast, timezone stri
 		lon,
 		lat,
 	)
-	client := http.Client{
-		Timeout: config.HTTPTimeout,
-	}
+	client := http.Client{}
 	url := fmt.Sprintf(
 		"https://api.openweathermap.org/data/3.0/onecall?lat=%f&lon=%f&exclude=minutely,hourly&units=metric&appid=%s",
 		lat,
@@ -28,13 +26,13 @@ func GetForecast(lon, lat float64) (forecast models.DailyForecast, timezone stri
 	response, err := client.Get(url)
 	if err != nil {
 		log.Println(err)
-		return GetForecast(lon, lat)
+		return models.DailyForecast{}, "Europe/Stockholm"
 	}
 	var result models.Forecast
 	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		log.Println(err)
-		return models.DailyForecast{}, "Sweden/Stockholm"
+		return models.DailyForecast{}, "Europe/Stockholm"
 	}
 	return result.Daily[1], result.Timezone
 }

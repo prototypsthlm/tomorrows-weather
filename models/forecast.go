@@ -57,7 +57,7 @@ type DailyForecast struct {
 	WindDeg   int     `json:"wind_deg"`
 	WindGust  float64 `json:"wind_gust"`
 	Weather   []struct {
-		ID          int    `json:"id"`
+		ID          int    `json:"id" default:"500"`
 		Main        string `json:"main"`
 		Description string `json:"description"`
 		Icon        string `json:"icon"`
