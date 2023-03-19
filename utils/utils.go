@@ -78,6 +78,7 @@ func DrawSky(skyTexture *ebiten.Image, location *time.Location) *ebiten.Image {
 
 // WeatherConditionIdToConfig returns number of raindrops and number of clouds
 func WeatherConditionIdToConfig(id int) (cloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness float64) {
+	id = 201
 	cloudsNum, raindropsNum, snowAmount, skySaturation, skyBrightness = 0, 0, 0, 1, 1
 	switch id {
 	// thunderstorm with light rain

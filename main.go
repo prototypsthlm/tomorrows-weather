@@ -1,13 +1,13 @@
 package main
 
 import (
-	_ "embed"
+	"embed"
 	"fmt"
+	"image/png"
 	_ "image/png"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/sandnuggah/tomorrows-weather/config"
 	"github.com/sandnuggah/tomorrows-weather/game"
 )
@@ -15,11 +15,11 @@ import (
 //go:embed shaders/snow.kage
 var snowShader []byte
 
-//go:embed shaders/gradient.kage
-var gradientShader []byte
-
 //go:embed shaders/stars.kage
 var starsShader []byte
+
+//go:embed textures/*
+var textures embed.FS
 
 var (
 	shaders       []*ebiten.Shader
@@ -32,31 +32,36 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	gradientShader, err := ebiten.NewShader(gradientShader)
-	if err != nil {
-		log.Fatal(err)
-	}
 	starsShader, err := ebiten.NewShader(starsShader)
 	if err != nil {
 		log.Fatal(err)
 	}
-	shaders = append(shaders, snowShader, gradientShader, starsShader)
+	shaders = append(shaders, snowShader, starsShader)
 }
 
 func init() {
-	image, _, err := ebitenutil.NewImageFromFile("textures/sky.png")
+	raw, err := textures.Open("textures/sky.png")
 	if err != nil {
 		log.Fatal(err)
 	}
-	skyTexture = image
+	decoded, err := png.Decode(raw)
+	if err != nil {
+		log.Fatal(err)
+	}
+	skyTexture = ebiten.NewImageFromImage(decoded)
 }
 
 func init() {
 	for i := 1; i <= 5; i++ {
-		image, _, err := ebitenutil.NewImageFromFile(fmt.Sprintf("textures/%d.png", i))
+		raw, err := textures.Open(fmt.Sprintf("textures/%d.png", i))
 		if err != nil {
 			log.Fatal(err)
 		}
+		decoded, err := png.Decode(raw)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image := ebiten.NewImageFromImage(decoded)
 		texture := ebiten.NewImage(image.Size())
 		texture.DrawImage(
 			image,

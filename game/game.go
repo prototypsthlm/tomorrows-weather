@@ -148,11 +148,11 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		op,
 	)
 	switch time.Now().In(game.location).Hour() {
-	case 22, 23, 0, 1, 2, 3, 4:
+	case 22, 23, 0, 1, 2, 3, 5:
 		screen.DrawRectShader(
 			config.WindowWidth,
 			config.WindowHeight,
-			game.Shaders[2], // stars
+			game.Shaders[1], // stars
 			&ebiten.DrawRectShaderOptions{
 				Uniforms: map[string]interface{}{
 					"Time": float32(game.time) / 60,
