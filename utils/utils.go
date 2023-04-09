@@ -77,9 +77,19 @@ func DrawSky(skyTexture *ebiten.Image, location *time.Location) *ebiten.Image {
 }
 
 // WeatherConditionIdToConfig returns number of raindrops and number of clouds
-func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness float64) {
-	aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount, skySaturation, skyBrightness = 0, 0, 0, 0, 0, 0, 1, 1
+func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness, cloudOpacity float64) {
+	aCloudsNum = 0
+	bCloudsNum = 0
+	cCloudsNum = 0
+	dCloudsNum = 0
+	snowAmount = 0
+	raindropsNum = 0
+	skySaturation = 1
+	skyBrightness = 1
+	cloudOpacity = 0.5
+
 	id = 802
+
 	switch id {
 	// thunderstorm with light rain
 	case 200:
@@ -262,5 +272,13 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 		aCloudsNum, skySaturation, skyBrightness = 12, 0.5, 0.7
 	}
 
-	return aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount, skySaturation, skyBrightness
+	return aCloudsNum,
+		bCloudsNum,
+		cCloudsNum,
+		dCloudsNum,
+		raindropsNum,
+		snowAmount,
+		skySaturation,
+		skyBrightness,
+		cloudOpacity
 }

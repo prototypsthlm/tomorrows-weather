@@ -40,6 +40,7 @@ type Game struct {
 	skyImage          *ebiten.Image
 	skySaturation     float64
 	skyBrightness     float64
+	cloudOpacity      float64
 	sprites           struct {
 		aClouds   sprites.Clouds
 		bClouds   sprites.Clouds
@@ -70,7 +71,8 @@ func (game *Game) init() {
 		game.sprites.raindrops.Num,
 		game.snowAmount,
 		game.skySaturation,
-		game.skyBrightness =
+		game.skyBrightness,
+		game.cloudOpacity =
 		utils.WeatherConditionIdToConfig(weatherId)
 
 	game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
@@ -167,8 +169,10 @@ func (game *Game) Update() error {
 			game.sprites.raindrops.Num,
 			game.snowAmount,
 			game.skySaturation,
-			game.skyBrightness =
+			game.skyBrightness,
+			game.cloudOpacity =
 			utils.WeatherConditionIdToConfig(weatherId)
+
 		game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
 		game.lastWeatherUpdate = time.Now()
 	}
@@ -197,11 +201,13 @@ func (game *Game) Update() error {
 		0,
 		config.MaxRaindrops,
 	)
-	game.sprites.aClouds.Update(game.forecast)
-	game.sprites.bClouds.Update(game.forecast)
-	game.sprites.cClouds.Update(game.forecast)
-	game.sprites.dClouds.Update(game.forecast)
+	game.sprites.aClouds.Update(game.forecast, game.cloudOpacity)
+	game.sprites.bClouds.Update(game.forecast, game.cloudOpacity)
+	game.sprites.cClouds.Update(game.forecast, game.cloudOpacity)
+	game.sprites.dClouds.Update(game.forecast, game.cloudOpacity)
+
 	game.sprites.raindrops.Update(game.forecast)
+
 	return nil
 }
 

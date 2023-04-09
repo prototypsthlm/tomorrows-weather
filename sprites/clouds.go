@@ -26,23 +26,13 @@ func (cloud *Cloud) init() {
 		cloud.inited = true
 	}()
 
-	cloud.PosX = utils.Randf(-500, config.WindowWidth+500)
-	cloud.PosY = utils.Randf(-200, config.WindowHeight-200)
+	cloud.PosX = utils.Randf(-200, config.WindowWidth+200)
+	cloud.PosY = utils.Randf(-200, 200)
 	cloud.VelX = utils.Randf(0.5, 1.5)
 	cloud.Scale = utils.Randf(0.6, 0.9)
-	cloud.Opacity = utils.Randf(0.5, 0.8)
-
-	cloud.op.ColorM.Scale(
-		1,
-		1,
-		1,
-		cloud.Opacity,
-	)
-
-	cloud.op.ColorM.ChangeHSV(0, 0.5, 1)
 }
 
-func (cloud *Cloud) Update(forecast models.DailyForecast) {
+func (cloud *Cloud) Update(forecast models.DailyForecast, cloudOpacity float64) {
 	if !cloud.inited {
 		cloud.init()
 	}
@@ -60,7 +50,8 @@ func (cloud *Cloud) Update(forecast models.DailyForecast) {
 	if forecast.WindDeg >= 180 && forecast.WindDeg < 360 {
 		cloud.PosX = cloud.PosX - cloud.VelX*config.WindSpeedModifier
 	}
-	cloud.Opacity = 0.1
+	cloud.op.ColorM.Reset()
+	cloud.op.ColorM.Scale(1, 1, 1, cloudOpacity)
 }
 
 func (cloud *Cloud) Draw(screen *ebiten.Image) {
@@ -82,9 +73,9 @@ type Clouds struct {
 	Num    int
 }
 
-func (clouds *Clouds) Update(forecast models.DailyForecast) {
+func (clouds *Clouds) Update(forecast models.DailyForecast, cloudOpacity float64) {
 	for i := 0; i < clouds.Num; i++ {
-		clouds.Clouds[i].Update(forecast)
+		clouds.Clouds[i].Update(forecast, cloudOpacity)
 	}
 }
 
