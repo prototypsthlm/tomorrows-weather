@@ -218,6 +218,16 @@ func (game *Game) Update() error {
 		0,
 		config.MaxClouds,
 	)
+	game.sprites.cClouds.Num = utils.Clamp(
+		game.sprites.cClouds.Num,
+		0,
+		config.MaxClouds,
+	)
+	game.sprites.dClouds.Num = utils.Clamp(
+		game.sprites.dClouds.Num,
+		0,
+		config.MaxClouds,
+	)
 	game.sprites.raindrops.Num = utils.Clamp(
 		game.sprites.raindrops.Num,
 		0,
@@ -225,6 +235,8 @@ func (game *Game) Update() error {
 	)
 	game.sprites.aClouds.Update(game.forecast)
 	game.sprites.bClouds.Update(game.forecast)
+	game.sprites.cClouds.Update(game.forecast)
+	game.sprites.dClouds.Update(game.forecast)
 	game.sprites.raindrops.Update(game.forecast)
 	return nil
 }
@@ -237,7 +249,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		op,
 	)
 	switch time.Now().In(game.location).Hour() {
-	default:
+	case 22, 23, 24, 0, 1, 2, 3, 4: // TODO: set when stars are visible
 		screen.DrawRectShader(
 			config.WindowWidth,
 			config.WindowHeight,
@@ -249,6 +261,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 			},
 		)
 	}
+
 	screen.DrawRectShader(
 		config.WindowWidth,
 		config.WindowHeight,
@@ -264,16 +277,22 @@ func (game *Game) Draw(screen *ebiten.Image) {
 			CompositeMode: ebiten.CompositeModeLighter,
 		},
 	)
+
 	game.sprites.aClouds.Draw(screen)
 	game.sprites.bClouds.Draw(screen)
+	game.sprites.cClouds.Draw(screen)
+	game.sprites.dClouds.Draw(screen)
+
 	game.sprites.raindrops.Draw(screen)
+
 	ebitenutil.DebugPrint(
 		screen,
 		fmt.Sprintf(
-			"code=%d tps=%f fps=%f",
+			"code=%d tps=%f fps=%f time=%s",
 			500,
 			ebiten.ActualTPS(),
 			ebiten.ActualFPS(),
+			time.Now().In(game.location).Format("15:04:05"),
 		),
 	)
 }

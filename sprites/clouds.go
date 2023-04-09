@@ -60,6 +60,7 @@ func (cloud *Cloud) Update(forecast models.DailyForecast) {
 	if forecast.WindDeg >= 180 && forecast.WindDeg < 360 {
 		cloud.PosX = cloud.PosX - cloud.VelX*config.WindSpeedModifier
 	}
+	cloud.Opacity = 0.5
 }
 
 func (cloud *Cloud) Draw(screen *ebiten.Image) {
