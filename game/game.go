@@ -15,15 +15,15 @@ import (
 	"github.com/sandnuggah/tomorrows-weather/utils"
 )
 
-// var (
-// 	lat = 34.0522
-// 	lon = 118.2437
-// )
-
 var (
-	lat = 45.7489
-	lon = 21.2087
+	lat = 34.0522
+	lon = 118.2437
 )
+
+// var (
+// 	lat = 45.7489
+// 	lon = 21.2087
+// )
 
 type Game struct {
 	Shaders        []*ebiten.Shader
@@ -229,10 +229,13 @@ func (game *Game) Draw(screen *ebiten.Image) {
 	)
 
 	if game.isFoggy {
-		screen.DrawImage(
-			game.fogImage,
-			&ebiten.DrawImageOptions{},
-		)
+		switch time.Now().In(game.location).Hour() {
+		case 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19:
+			screen.DrawImage(
+				game.fogImage,
+				&ebiten.DrawImageOptions{},
+			)
+		}
 	}
 
 	switch time.Now().In(game.location).Hour() {
