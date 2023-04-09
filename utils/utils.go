@@ -247,11 +247,15 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 
 	// scattered clouds 26-50%
 	case 802:
-		aCloudsNum, skySaturation, skyBrightness = 12, 1, 1
+		aCloudsNum = 0
+		bCloudsNum = 4
+		cCloudsNum = 0
+		dCloudsNum = 0
+		skySaturation, skyBrightness = 1, 1
 
 	// broken clouds 51-84%
 	case 803:
-		aCloudsNum, bCloudsNum, skySaturation, skyBrightness = 12, 12, 0.5, 0.7
+		bCloudsNum, bCloudsNum, skySaturation, skyBrightness = 4, 12, 0.5, 0.7
 
 	// overcast clouds 85-100%
 	case 804:

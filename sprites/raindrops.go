@@ -33,10 +33,9 @@ func (raindrop *Raindrop) init() {
 		-20,
 	)
 	raindrop.X = utils.Randf(0, config.WindowHeight)
-	raindrop.Alpha = utils.Rand(
-		50,
-		127,
-	)
+	raindrop.VelX = utils.Randf(-0.5, 0.5)
+	raindrop.VelY = utils.Randf(15, 20)
+	raindrop.Alpha = utils.Rand(50, 127)
 }
 
 func (raindrop *Raindrop) Update(forecast models.DailyForecast) {

@@ -85,16 +85,8 @@ func (game *Game) init() {
 		texture := game.ACloudTextures[0]
 		w, h := texture.Size()
 		game.sprites.aClouds.Clouds[i] = &sprites.Cloud{
-			ImgW: w,
-			ImgH: h,
-			PosX: utils.Randf(-1500, config.WindowWidth+1500),
-			PosY: utils.Randf(
-				200,
-				config.WindowHeight+500,
-			),
-			VelX:    utils.Randf(0.5, 1.5),
-			Scale:   utils.Randf(0.6, 0.9),
-			Opacity: utils.Randf(0.5, 0.8),
+			ImgW:    w,
+			ImgH:    h,
 			Texture: texture,
 		}
 	}
@@ -104,19 +96,11 @@ func (game *Game) init() {
 		config.MaxClouds,
 	)
 	for i := range game.sprites.bClouds.Clouds {
-		texture := game.BCloudTextures[utils.Rand(1, 5)]
+		texture := game.BCloudTextures[utils.Rand(0, len(game.BCloudTextures))]
 		w, h := texture.Size()
 		game.sprites.bClouds.Clouds[i] = &sprites.Cloud{
-			ImgW: w,
-			ImgH: h,
-			PosX: utils.Randf(-1500, config.WindowWidth+1500),
-			PosY: utils.Randf(
-				200,
-				config.WindowHeight+500,
-			),
-			VelX:    utils.Randf(0.5, 1.5),
-			Scale:   utils.Randf(0.6, 0.9),
-			Opacity: utils.Randf(0.5, 0.8),
+			ImgW:    w,
+			ImgH:    h,
 			Texture: texture,
 		}
 	}
@@ -126,19 +110,11 @@ func (game *Game) init() {
 		config.MaxClouds,
 	)
 	for i := range game.sprites.cClouds.Clouds {
-		texture := game.BCloudTextures[utils.Rand(1, 4)]
+		texture := game.CCloudTextures[utils.Rand(0, len(game.CCloudTextures))]
 		w, h := texture.Size()
 		game.sprites.cClouds.Clouds[i] = &sprites.Cloud{
-			ImgW: w,
-			ImgH: h,
-			PosX: utils.Randf(-1500, config.WindowWidth+1500),
-			PosY: utils.Randf(
-				200,
-				config.WindowHeight+500,
-			),
-			VelX:    utils.Randf(0.5, 1.5),
-			Scale:   utils.Randf(0.6, 0.9),
-			Opacity: utils.Randf(0.5, 0.8),
+			ImgW:    w,
+			ImgH:    h,
 			Texture: texture,
 		}
 	}
@@ -148,19 +124,11 @@ func (game *Game) init() {
 		config.MaxClouds,
 	)
 	for i := range game.sprites.dClouds.Clouds {
-		texture := game.DCloudTextures[utils.Rand(1, 3)]
+		texture := game.DCloudTextures[utils.Rand(0, len(game.DCloudTextures))]
 		w, h := texture.Size()
 		game.sprites.dClouds.Clouds[i] = &sprites.Cloud{
-			ImgW: w,
-			ImgH: h,
-			PosX: utils.Randf(-1500, config.WindowWidth+1500),
-			PosY: utils.Randf(
-				200,
-				config.WindowHeight+500,
-			),
-			VelX:    utils.Randf(0.5, 1.5),
-			Scale:   utils.Randf(0.6, 0.9),
-			Opacity: utils.Randf(0.5, 0.8),
+			ImgW:    w,
+			ImgH:    h,
 			Texture: texture,
 		}
 	}
@@ -170,11 +138,7 @@ func (game *Game) init() {
 		config.MaxRaindrops,
 	)
 	for i := range game.sprites.raindrops.Raindrops {
-		game.sprites.raindrops.Raindrops[i] = &sprites.Raindrop{
-			VelX:  utils.Randf(-0.5, 0.5),
-			VelY:  utils.Randf(15, 20),
-			Alpha: utils.Rand(50, 127),
-		}
+		game.sprites.raindrops.Raindrops[i] = &sprites.Raindrop{}
 	}
 }
 
