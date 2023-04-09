@@ -29,8 +29,8 @@ func (cloud *Cloud) init() {
 	cloud.Scale = utils.Randf(0.6, 0.9)
 
 	cloud.PosY = utils.Randf(
-		-200,
-		config.WindowHeight+200,
+		0,
+		config.WindowHeight+500,
 	)
 
 	cloud.op.ColorM.Scale(

@@ -16,14 +16,19 @@ import (
 )
 
 var (
-	lat = 45.7489
-	lon = 21.2087
+	lat = 34.0522
+	lon = 118.2437
+	// lat = 45.7489
+	// lon = 21.2087
 )
 
 type Game struct {
-	Shaders       []*ebiten.Shader
-	SkyTexture    *ebiten.Image
-	CloudTextures []*ebiten.Image
+	Shaders        []*ebiten.Shader
+	SkyTexture     *ebiten.Image
+	ACloudTextures []*ebiten.Image
+	BCloudTextures []*ebiten.Image
+	CCloudTextures []*ebiten.Image
+	DCloudTextures []*ebiten.Image
 
 	inited            bool
 	snowAmount        int
@@ -36,7 +41,10 @@ type Game struct {
 	skySaturation     float64
 	skyBrightness     float64
 	sprites           struct {
-		clouds    sprites.Clouds
+		aClouds   sprites.Clouds
+		bClouds   sprites.Clouds
+		cClouds   sprites.Clouds
+		dClouds   sprites.Clouds
 		raindrops sprites.Raindrops
 	}
 }
@@ -54,8 +62,11 @@ func (game *Game) init() {
 	if len(game.forecast.Weather) > 0 {
 		weatherId = game.forecast.Weather[0].ID
 	}
-
-	game.sprites.clouds.Num,
+	// ------------------------------------------------
+	game.sprites.aClouds.Num,
+		game.sprites.bClouds.Num,
+		game.sprites.cClouds.Num,
+		game.sprites.dClouds.Num,
 		game.sprites.raindrops.Num,
 		game.snowAmount,
 		game.skySaturation,
@@ -64,20 +75,22 @@ func (game *Game) init() {
 
 	game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
 	game.lastWeatherUpdate = time.Now()
-	game.sprites.clouds.Clouds = make(
+
+	// ------------------------------------------------
+	game.sprites.aClouds.Clouds = make(
 		[]*sprites.Cloud,
 		config.MaxClouds,
 	)
-	for i := range game.sprites.clouds.Clouds {
-		texture := game.CloudTextures[utils.Rand(1, 5)]
+	for i := range game.sprites.aClouds.Clouds {
+		texture := game.ACloudTextures[0]
 		w, h := texture.Size()
-		game.sprites.clouds.Clouds[i] = &sprites.Cloud{
+		game.sprites.aClouds.Clouds[i] = &sprites.Cloud{
 			ImgW: w,
 			ImgH: h,
 			PosX: utils.Randf(-1500, config.WindowWidth+1500),
 			PosY: utils.Randf(
-				-200,
-				config.WindowHeight+200,
+				200,
+				config.WindowHeight+500,
 			),
 			VelX:    utils.Randf(0.5, 1.5),
 			Scale:   utils.Randf(0.6, 0.9),
@@ -85,6 +98,73 @@ func (game *Game) init() {
 			Texture: texture,
 		}
 	}
+	// ------------------------------------------------
+	game.sprites.bClouds.Clouds = make(
+		[]*sprites.Cloud,
+		config.MaxClouds,
+	)
+	for i := range game.sprites.bClouds.Clouds {
+		texture := game.BCloudTextures[utils.Rand(1, 5)]
+		w, h := texture.Size()
+		game.sprites.bClouds.Clouds[i] = &sprites.Cloud{
+			ImgW: w,
+			ImgH: h,
+			PosX: utils.Randf(-1500, config.WindowWidth+1500),
+			PosY: utils.Randf(
+				200,
+				config.WindowHeight+500,
+			),
+			VelX:    utils.Randf(0.5, 1.5),
+			Scale:   utils.Randf(0.6, 0.9),
+			Opacity: utils.Randf(0.5, 0.8),
+			Texture: texture,
+		}
+	}
+	// ------------------------------------------------
+	game.sprites.cClouds.Clouds = make(
+		[]*sprites.Cloud,
+		config.MaxClouds,
+	)
+	for i := range game.sprites.cClouds.Clouds {
+		texture := game.BCloudTextures[utils.Rand(1, 4)]
+		w, h := texture.Size()
+		game.sprites.cClouds.Clouds[i] = &sprites.Cloud{
+			ImgW: w,
+			ImgH: h,
+			PosX: utils.Randf(-1500, config.WindowWidth+1500),
+			PosY: utils.Randf(
+				200,
+				config.WindowHeight+500,
+			),
+			VelX:    utils.Randf(0.5, 1.5),
+			Scale:   utils.Randf(0.6, 0.9),
+			Opacity: utils.Randf(0.5, 0.8),
+			Texture: texture,
+		}
+	}
+	// ------------------------------------------------
+	game.sprites.dClouds.Clouds = make(
+		[]*sprites.Cloud,
+		config.MaxClouds,
+	)
+	for i := range game.sprites.dClouds.Clouds {
+		texture := game.DCloudTextures[utils.Rand(1, 3)]
+		w, h := texture.Size()
+		game.sprites.dClouds.Clouds[i] = &sprites.Cloud{
+			ImgW: w,
+			ImgH: h,
+			PosX: utils.Randf(-1500, config.WindowWidth+1500),
+			PosY: utils.Randf(
+				200,
+				config.WindowHeight+500,
+			),
+			VelX:    utils.Randf(0.5, 1.5),
+			Scale:   utils.Randf(0.6, 0.9),
+			Opacity: utils.Randf(0.5, 0.8),
+			Texture: texture,
+		}
+	}
+	// ------------------------------------------------
 	game.sprites.raindrops.Raindrops = make(
 		[]*sprites.Raindrop,
 		config.MaxRaindrops,
@@ -116,7 +196,10 @@ func (game *Game) Update() error {
 			weatherId = game.forecast.Weather[0].ID
 		}
 
-		game.sprites.clouds.Num,
+		game.sprites.aClouds.Num,
+			game.sprites.bClouds.Num,
+			game.sprites.cClouds.Num,
+			game.sprites.dClouds.Num,
 			game.sprites.raindrops.Num,
 			game.snowAmount,
 			game.skySaturation,
@@ -125,8 +208,13 @@ func (game *Game) Update() error {
 		game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
 		game.lastWeatherUpdate = time.Now()
 	}
-	game.sprites.clouds.Num = utils.Clamp(
-		game.sprites.clouds.Num,
+	game.sprites.aClouds.Num = utils.Clamp(
+		game.sprites.aClouds.Num,
+		0,
+		config.MaxClouds,
+	)
+	game.sprites.bClouds.Num = utils.Clamp(
+		game.sprites.bClouds.Num,
 		0,
 		config.MaxClouds,
 	)
@@ -135,7 +223,8 @@ func (game *Game) Update() error {
 		0,
 		config.MaxRaindrops,
 	)
-	game.sprites.clouds.Update(game.forecast)
+	game.sprites.aClouds.Update(game.forecast)
+	game.sprites.bClouds.Update(game.forecast)
 	game.sprites.raindrops.Update(game.forecast)
 	return nil
 }
@@ -148,7 +237,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		op,
 	)
 	switch time.Now().In(game.location).Hour() {
-	case 22, 23, 0, 1, 2, 3, 5:
+	default:
 		screen.DrawRectShader(
 			config.WindowWidth,
 			config.WindowHeight,
@@ -175,7 +264,8 @@ func (game *Game) Draw(screen *ebiten.Image) {
 			CompositeMode: ebiten.CompositeModeLighter,
 		},
 	)
-	game.sprites.clouds.Draw(screen)
+	game.sprites.aClouds.Draw(screen)
+	game.sprites.bClouds.Draw(screen)
 	game.sprites.raindrops.Draw(screen)
 	ebitenutil.DebugPrint(
 		screen,

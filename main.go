@@ -4,7 +4,6 @@ import (
 	"embed"
 	"fmt"
 	"image/png"
-	_ "image/png"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -22,9 +21,12 @@ var starsShader []byte
 var textures embed.FS
 
 var (
-	shaders       []*ebiten.Shader
-	cloudTextures []*ebiten.Image
-	skyTexture    *ebiten.Image
+	shaders        []*ebiten.Shader
+	aCloudTextures []*ebiten.Image
+	bCloudTextures []*ebiten.Image
+	cCloudTextures []*ebiten.Image
+	dCloudTextures []*ebiten.Image
+	skyTexture     *ebiten.Image
 )
 
 func init() {
@@ -52,8 +54,8 @@ func init() {
 }
 
 func init() {
-	for i := 1; i <= 5; i++ {
-		raw, err := textures.Open(fmt.Sprintf("textures/%d.png", i))
+	for i := 1; i <= 1; i++ {
+		raw, err := textures.Open(fmt.Sprintf("textures/1/%d.png", i))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -67,7 +69,65 @@ func init() {
 			image,
 			&ebiten.DrawImageOptions{},
 		)
-		cloudTextures = append(cloudTextures, texture)
+		aCloudTextures = append(aCloudTextures, texture)
+	}
+}
+
+func init() {
+	for i := 1; i <= 5; i++ {
+		raw, err := textures.Open(fmt.Sprintf("textures/2/%d.png", i))
+		if err != nil {
+			log.Fatal(err)
+		}
+		decoded, err := png.Decode(raw)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image := ebiten.NewImageFromImage(decoded)
+		texture := ebiten.NewImage(image.Size())
+		texture.DrawImage(
+			image,
+			&ebiten.DrawImageOptions{},
+		)
+		bCloudTextures = append(bCloudTextures, texture)
+	}
+}
+func init() {
+	for i := 1; i <= 4; i++ {
+		raw, err := textures.Open(fmt.Sprintf("textures/3/%d.png", i))
+		if err != nil {
+			log.Fatal(err)
+		}
+		decoded, err := png.Decode(raw)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image := ebiten.NewImageFromImage(decoded)
+		texture := ebiten.NewImage(image.Size())
+		texture.DrawImage(
+			image,
+			&ebiten.DrawImageOptions{},
+		)
+		cCloudTextures = append(cCloudTextures, texture)
+	}
+}
+func init() {
+	for i := 1; i <= 3; i++ {
+		raw, err := textures.Open(fmt.Sprintf("textures/4/%d.png", i))
+		if err != nil {
+			log.Fatal(err)
+		}
+		decoded, err := png.Decode(raw)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image := ebiten.NewImageFromImage(decoded)
+		texture := ebiten.NewImage(image.Size())
+		texture.DrawImage(
+			image,
+			&ebiten.DrawImageOptions{},
+		)
+		dCloudTextures = append(dCloudTextures, texture)
 	}
 }
 
@@ -78,9 +138,12 @@ func main() {
 	)
 	ebiten.SetWindowTitle("Tomorrows Weather")
 	if err := ebiten.RunGame(&game.Game{
-		Shaders:       shaders,
-		CloudTextures: cloudTextures,
-		SkyTexture:    skyTexture,
+		Shaders:        shaders,
+		ACloudTextures: aCloudTextures,
+		BCloudTextures: bCloudTextures,
+		CCloudTextures: cCloudTextures,
+		DCloudTextures: dCloudTextures,
+		SkyTexture:     skyTexture,
 	}); err != nil {
 		log.Fatal(err)
 	}
