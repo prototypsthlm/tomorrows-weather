@@ -29,8 +29,8 @@ func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
   _Star2Color := vec4(0.18, 0.03, 0.41, 0.7);
   _Star3Color := vec4(0.63, 0.50, 0.81, 0.7);
   _Grid := 40.0;
-  _Size := 0.15;
-  _Speed := vec2(0, 3);
+  _Size := 0.05;
+  _Speed := vec2(0, 0.1);
   fragColor := vec4(0,0,0,0);
   fragColor = drawStars(fragColor, _Star1Color, texCoord.xy, _Grid, _Size, _Speed, 123456.789);
   fragColor = drawStars(fragColor, _Star2Color, texCoord.xy, _Grid * 2.0 / 3.0, _Size, _Speed / 1.2, 345678.912);
