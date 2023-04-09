@@ -15,16 +15,20 @@ import (
 	"github.com/sandnuggah/tomorrows-weather/utils"
 )
 
+// var (
+// 	lat = 34.0522
+// 	lon = 118.2437
+// )
+
 var (
-	lat = 34.0522
-	lon = 118.2437
-	// lat = 45.7489
-	// lon = 21.2087
+	lat = 45.7489
+	lon = 21.2087
 )
 
 type Game struct {
 	Shaders        []*ebiten.Shader
 	SkyTexture     *ebiten.Image
+	FogTexture     *ebiten.Image
 	ACloudTextures []*ebiten.Image
 	BCloudTextures []*ebiten.Image
 	CCloudTextures []*ebiten.Image
@@ -38,9 +42,11 @@ type Game struct {
 	time              int
 	lastWeatherUpdate time.Time
 	skyImage          *ebiten.Image
+	fogImage          *ebiten.Image
 	skySaturation     float64
 	skyBrightness     float64
 	cloudOpacity      float64
+	isFoggy           bool
 	sprites           struct {
 		aClouds   sprites.Clouds
 		bClouds   sprites.Clouds
@@ -59,11 +65,11 @@ func (game *Game) init() {
 	game.timezone = timezone
 	game.location, _ = time.LoadLocation(game.timezone)
 
+	// ------------------------------------------------
 	weatherId := config.DefaultWeatherId
 	if len(game.forecast.Weather) > 0 {
 		weatherId = game.forecast.Weather[0].ID
 	}
-	// ------------------------------------------------
 	game.sprites.aClouds.Num,
 		game.sprites.bClouds.Num,
 		game.sprites.cClouds.Num,
@@ -72,10 +78,12 @@ func (game *Game) init() {
 		game.snowAmount,
 		game.skySaturation,
 		game.skyBrightness,
-		game.cloudOpacity =
+		game.cloudOpacity,
+		game.isFoggy =
 		utils.WeatherConditionIdToConfig(weatherId)
 
 	game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
+	game.fogImage = utils.DrawFog(game.FogTexture)
 	game.lastWeatherUpdate = time.Now()
 
 	// ------------------------------------------------
@@ -170,7 +178,8 @@ func (game *Game) Update() error {
 			game.snowAmount,
 			game.skySaturation,
 			game.skyBrightness,
-			game.cloudOpacity =
+			game.cloudOpacity,
+			game.isFoggy =
 			utils.WeatherConditionIdToConfig(weatherId)
 
 		game.skyImage = utils.DrawSky(game.SkyTexture, game.location)
@@ -218,6 +227,14 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		game.skyImage,
 		op,
 	)
+
+	if game.isFoggy {
+		screen.DrawImage(
+			game.fogImage,
+			&ebiten.DrawImageOptions{},
+		)
+	}
+
 	switch time.Now().In(game.location).Hour() {
 	case 22, 23, 24, 0, 1, 2, 3, 4: // TODO: set when stars are visible
 		screen.DrawRectShader(
@@ -259,7 +276,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		screen,
 		fmt.Sprintf(
 			"code=%d tps=%f fps=%f time=%s",
-			500,
+			game.forecast.Weather[0].ID,
 			ebiten.ActualTPS(),
 			ebiten.ActualFPS(),
 			time.Now().In(game.location).Format("15:04:05"),

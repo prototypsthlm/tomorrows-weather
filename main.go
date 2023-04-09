@@ -27,6 +27,7 @@ var (
 	cCloudTextures []*ebiten.Image
 	dCloudTextures []*ebiten.Image
 	skyTexture     *ebiten.Image
+	fogTexture     *ebiten.Image
 )
 
 func init() {
@@ -51,6 +52,18 @@ func init() {
 		log.Fatal(err)
 	}
 	skyTexture = ebiten.NewImageFromImage(decoded)
+}
+
+func init() {
+	raw, err := textures.Open("textures/fog/1.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+	decoded, err := png.Decode(raw)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fogTexture = ebiten.NewImageFromImage(decoded)
 }
 
 func init() {
@@ -144,6 +157,7 @@ func main() {
 		CCloudTextures: cCloudTextures,
 		DCloudTextures: dCloudTextures,
 		SkyTexture:     skyTexture,
+		FogTexture:     fogTexture,
 	}); err != nil {
 		log.Fatal(err)
 	}

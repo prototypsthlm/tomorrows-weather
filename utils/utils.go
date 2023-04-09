@@ -76,8 +76,12 @@ func DrawSky(skyTexture *ebiten.Image, location *time.Location) *ebiten.Image {
 	return img
 }
 
+func DrawFog(fogTexture *ebiten.Image) *ebiten.Image {
+	return ebiten.NewImageFromImage(fogTexture)
+}
+
 // WeatherConditionIdToConfig returns number of raindrops and number of clouds
-func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness, cloudOpacity float64) {
+func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness, cloudOpacity float64, isFoggy bool) {
 	aCloudsNum = 0
 	bCloudsNum = 0
 	cCloudsNum = 0
@@ -87,6 +91,7 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	skySaturation = 1
 	skyBrightness = 1
 	cloudOpacity = 0.5
+	isFoggy = true
 
 	id = 802
 
@@ -280,5 +285,6 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 		snowAmount,
 		skySaturation,
 		skyBrightness,
-		cloudOpacity
+		cloudOpacity,
+		isFoggy
 }
