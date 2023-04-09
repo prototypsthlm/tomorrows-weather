@@ -15,15 +15,15 @@ import (
 	"github.com/sandnuggah/tomorrows-weather/utils"
 )
 
-var (
-	lat = 34.0522
-	lon = 118.2437
-)
-
 // var (
-// 	lat = 45.7489
-// 	lon = 21.2087
+// 	lat = 34.0522
+// 	lon = 118.2437
 // )
+
+var (
+	lat = 45.7489
+	lon = 21.2087
+)
 
 type Game struct {
 	Shaders        []*ebiten.Shader
@@ -210,6 +210,14 @@ func (game *Game) Update() error {
 		0,
 		config.MaxRaindrops,
 	)
+
+	// Set the sky saturation and cloud opacity based on the time of day
+	switch time.Now().In(game.location).Hour() {
+	case 20, 21, 22, 23, 24, 0, 1, 2, 3, 4:
+		game.cloudOpacity = 0.5
+		game.skySaturation = 0.5
+	}
+
 	game.sprites.aClouds.Update(game.forecast, game.cloudOpacity)
 	game.sprites.bClouds.Update(game.forecast, game.cloudOpacity)
 	game.sprites.cClouds.Update(game.forecast, game.cloudOpacity)
@@ -222,18 +230,23 @@ func (game *Game) Update() error {
 
 func (game *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
+	op.ColorM.Reset()
 	op.ColorM.ChangeHSV(0, game.skySaturation, 1)
 	screen.DrawImage(
 		game.skyImage,
 		op,
 	)
 
-	if game.isFoggy {
-		switch time.Now().In(game.location).Hour() {
-		case 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19:
+	switch time.Now().In(game.location).Hour() {
+	case 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19:
+		// Only display fog during the day
+		if game.isFoggy {
+			op := &ebiten.DrawImageOptions{}
+			op.ColorM.Reset()
+			op.ColorM.Scale(1, 1, 1, 0.5)
 			screen.DrawImage(
 				game.fogImage,
-				&ebiten.DrawImageOptions{},
+				op,
 			)
 		}
 	}

@@ -93,7 +93,7 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	cloudOpacity = 1
 	isFoggy = false
 
-	id = 200
+	id = 300
 
 	switch id {
 	// thunderstorm with light rain
@@ -126,27 +126,63 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	// 221: ragged thunderstorm
 	// 230: thunderstorm with light drizzle
 	case 210:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 50, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
+
 	case 211:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 50, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
+
 	case 212:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 50, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
+
 	case 221:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 50, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
+
 	case 230:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 50, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
 
 	// thunderstorm with drizzle
 	case 231:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 30, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
 
 	// thunderstorm with heavy drizzle
 	case 232:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 60, 0.2, 1
+		raindropsNum = 100
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
 
 	// light intensity drizzle
 	case 300:
-		dCloudsNum, raindropsNum, skySaturation, skyBrightness = 50, 100, 0.2, 1
+		raindropsNum = 50
+		skySaturation = 0.2
+		cloudOpacity = 0.5
+		skyBrightness = 1
+		isFoggy = true
 
 	// drizzle
 	case 301:
@@ -276,17 +312,23 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	case 802:
 		aCloudsNum = 0
 		bCloudsNum = 4
-		cCloudsNum = 0
+		cCloudsNum = 2
 		dCloudsNum = 0
-		skySaturation, skyBrightness = 1, 1
+		skySaturation = 1
+		skyBrightness = 1
 
-	// broken clouds 51-84%
+		// broken clouds 51-84%
 	case 803:
-		bCloudsNum, bCloudsNum, skySaturation, skyBrightness = 4, 12, 0.5, 0.7
 
-	// overcast clouds 85-100%
+		// overcast clouds 85-100%
 	case 804:
-		aCloudsNum, skySaturation, skyBrightness = 12, 0.5, 0.7
+		aCloudsNum = 0
+		bCloudsNum = 4
+		cCloudsNum = 2
+		dCloudsNum = 0
+		skySaturation = 1
+		skyBrightness = 1
+
 	}
 
 	return aCloudsNum,
