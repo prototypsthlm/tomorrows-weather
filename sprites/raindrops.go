@@ -55,7 +55,7 @@ func (raindrop *Raindrop) Draw(screen *ebiten.Image) {
 		raindrop.X,
 		raindrop.Y,
 		raindrop.X,
-		raindrop.Y+utils.Randf(10, 20),
+		raindrop.Y+utils.Randf(8, 12),
 		color.RGBA{
 			R: uint8(200),
 			G: uint8(200),
