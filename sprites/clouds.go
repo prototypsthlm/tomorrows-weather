@@ -29,7 +29,7 @@ func (cloud *Cloud) init() {
 	cloud.PosX = utils.Randf(-200, config.WindowWidth+200)
 	cloud.PosY = utils.Randf(-200, 200)
 	cloud.VelX = utils.Randf(0.5, 1.5)
-	cloud.Scale = utils.Randf(0.6, 0.9)
+	cloud.Scale = utils.Randf(0.8, 1)
 }
 
 func (cloud *Cloud) Update(forecast models.DailyForecast, cloudOpacity float64) {
