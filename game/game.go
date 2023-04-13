@@ -15,11 +15,7 @@ import (
 	"github.com/sandnuggah/tomorrows-weather/utils"
 )
 
-// var (
-// 	lat = 34.0522
-// 	lon = 118.2437
-// )
-
+// Timișoara, Romania
 var (
 	lat = 45.7489
 	lon = 21.2087
@@ -237,22 +233,30 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		op,
 	)
 
-	switch time.Now().In(game.location).Hour() {
-	case 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19:
-		// Only display fog during the day
-		if game.isFoggy {
-			op := &ebiten.DrawImageOptions{}
-			op.ColorM.Reset()
-			op.ColorM.Scale(1, 1, 1, 0.5)
-			screen.DrawImage(
-				game.fogImage,
-				op,
-			)
+	if game.isFoggy {
+		op := &ebiten.DrawImageOptions{}
+		op.ColorM.Reset()
+		// op.CompositeMode = ebiten.CompositeModeDestinationOver
+		// op.CompositeMode = ebiten.CompositeModeSourceAtop
+		// op.CompositeMode = ebiten.CompositeModeSourceOver
+		// op.CompositeMode = ebiten.CompositeModeXor
+
+		switch time.Now().In(game.location).Hour() {
+		case 22, 23, 0, 1, 2, 3, 4, 5:
+			op.CompositeMode = ebiten.CompositeModeXor
+		default:
+			op.CompositeMode = ebiten.CompositeModeSourceAtop
+			op.ColorM.ChangeHSV(1, 1, 0.5)
 		}
+
+		screen.DrawImage(
+			game.fogImage,
+			op,
+		)
 	}
 
 	switch time.Now().In(game.location).Hour() {
-	case 22, 23, 24, 0, 1, 2, 3, 4: // TODO: set when stars are visible
+	case 22, 23, 0, 1, 2, 3, 4, 5: // TODO: set when stars are visible
 		screen.DrawRectShader(
 			config.WindowWidth,
 			config.WindowHeight,
