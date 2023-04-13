@@ -2,12 +2,10 @@ package game
 
 import (
 	_ "embed"
-	"fmt"
 	_ "image/png"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/sandnuggah/tomorrows-weather/api"
 	"github.com/sandnuggah/tomorrows-weather/config"
 	"github.com/sandnuggah/tomorrows-weather/models"
@@ -292,16 +290,16 @@ func (game *Game) Draw(screen *ebiten.Image) {
 
 	game.sprites.raindrops.Draw(screen)
 
-	ebitenutil.DebugPrint(
-		screen,
-		fmt.Sprintf(
-			"code=%d tps=%f fps=%f time=%s",
-			game.forecast.Weather[0].ID,
-			ebiten.ActualTPS(),
-			ebiten.ActualFPS(),
-			time.Now().In(game.location).Format("15:04:05"),
-		),
-	)
+	// ebitenutil.DebugPrint(
+	// 	screen,
+	// 	fmt.Sprintf(
+	// 		"code=%d tps=%f fps=%f time=%s",
+	// 		game.forecast.Weather[0].ID,
+	// 		ebiten.ActualTPS(),
+	// 		ebiten.ActualFPS(),
+	// 		time.Now().In(game.location).Format("15:04:05"),
+	// 	),
+	// )
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
