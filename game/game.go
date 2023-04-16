@@ -234,11 +234,6 @@ func (game *Game) Draw(screen *ebiten.Image) {
 	if game.isFoggy {
 		op := &ebiten.DrawImageOptions{}
 		op.ColorM.Reset()
-		// op.CompositeMode = ebiten.CompositeModeDestinationOver
-		// op.CompositeMode = ebiten.CompositeModeSourceAtop
-		// op.CompositeMode = ebiten.CompositeModeSourceOver
-		// op.CompositeMode = ebiten.CompositeModeXor
-
 		switch time.Now().In(game.location).Hour() {
 		case 22, 23, 0, 1, 2, 3, 4, 5:
 			op.CompositeMode = ebiten.CompositeModeXor
