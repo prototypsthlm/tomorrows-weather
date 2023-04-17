@@ -26,13 +26,13 @@ func GetForecast(lon, lat float64) (forecast models.DailyForecast, timezone stri
 	response, err := client.Get(url)
 	if err != nil {
 		log.Println(err)
-		return models.DailyForecast{}, "Europe/Stockholm"
+		return models.DailyForecast{}, "Europe/Bucharest"
 	}
 	var result models.Forecast
 	json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
 		log.Println(err)
-		return models.DailyForecast{}, "Europe/Stockholm"
+		return models.DailyForecast{}, "Europe/Bucharest"
 	}
 	return result.Daily[1], result.Timezone
 }
