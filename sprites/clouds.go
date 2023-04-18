@@ -28,7 +28,7 @@ func (cloud *Cloud) init() {
 
 	cloud.PosX = utils.Randf(-200, config.WindowWidth+200)
 	cloud.PosY = utils.Randf(-200, 200)
-	cloud.VelX = utils.Randf(0.5, 1.1)
+	cloud.VelX = utils.Randf(0.5, 0.8)
 	cloud.Scale = utils.Randf(1, 2)
 }
 
@@ -36,11 +36,11 @@ func (cloud *Cloud) Update(forecast models.DailyForecast, cloudOpacity float64) 
 	if !cloud.inited {
 		cloud.init()
 	}
-	if cloud.PosX > config.WindowWidth/cloud.Scale+2000 {
+	if cloud.PosX > config.WindowWidth/cloud.Scale+200 {
 		cloud.init()
 		cloud.PosX = -float64(cloud.ImgW)
 	}
-	if cloud.PosX < -float64(cloud.ImgW)-2000 {
+	if cloud.PosX < -float64(cloud.ImgW)-200 {
 		cloud.init()
 		cloud.PosX = config.WindowWidth / cloud.Scale
 	}
