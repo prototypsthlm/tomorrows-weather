@@ -35,5 +35,5 @@ func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
   fragColor = drawStars(fragColor, _Star1Color, texCoord.xy, _Grid, _Size, _Speed, 123456.789);
   fragColor = drawStars(fragColor, _Star2Color, texCoord.xy, _Grid * 2.0 / 3.0, _Size, _Speed / 1.2, 345678.912);
   fragColor = drawStars(fragColor, _Star3Color, texCoord.xy, _Grid / 2.0, _Size * 3.0 / 4.0, _Speed / 1.6, 567891.234);
-  return fragColor;
+  return fragColor / 2;
 }
