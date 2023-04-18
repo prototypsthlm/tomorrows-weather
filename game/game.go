@@ -15,8 +15,14 @@ import (
 
 // Timișoara, Romania
 var (
+// lat = 45.7489
+// lon = 21.2087
+)
+
+var (
 	lat = 45.7489
-	lon = 21.2087
+	lon = -41.2087
+	// lon = 21.2087
 )
 
 type Game struct {
@@ -27,6 +33,7 @@ type Game struct {
 	BCloudTextures []*ebiten.Image
 	CCloudTextures []*ebiten.Image
 	DCloudTextures []*ebiten.Image
+	ECloudTextures []*ebiten.Image
 
 	inited            bool
 	snowAmount        int
@@ -46,6 +53,7 @@ type Game struct {
 		bClouds   sprites.Clouds
 		cClouds   sprites.Clouds
 		dClouds   sprites.Clouds
+		eClouds   sprites.Clouds
 		raindrops sprites.Raindrops
 	}
 }
@@ -68,6 +76,7 @@ func (game *Game) init() {
 		game.sprites.bClouds.Num,
 		game.sprites.cClouds.Num,
 		game.sprites.dClouds.Num,
+		game.sprites.eClouds.Num,
 		game.sprites.raindrops.Num,
 		game.snowAmount,
 		game.skySaturation,
@@ -137,6 +146,20 @@ func (game *Game) init() {
 		}
 	}
 	// ------------------------------------------------
+	game.sprites.eClouds.Clouds = make(
+		[]*sprites.Cloud,
+		config.MaxClouds,
+	)
+	for i := range game.sprites.eClouds.Clouds {
+		texture := game.ECloudTextures[utils.Rand(0, len(game.ECloudTextures))]
+		w, h := texture.Size()
+		game.sprites.eClouds.Clouds[i] = &sprites.Cloud{
+			ImgW:    w,
+			ImgH:    h,
+			Texture: texture,
+		}
+	}
+	// ------------------------------------------------
 	game.sprites.raindrops.Raindrops = make(
 		[]*sprites.Raindrop,
 		config.MaxRaindrops,
@@ -168,6 +191,7 @@ func (game *Game) Update() error {
 			game.sprites.bClouds.Num,
 			game.sprites.cClouds.Num,
 			game.sprites.dClouds.Num,
+			game.sprites.eClouds.Num,
 			game.sprites.raindrops.Num,
 			game.snowAmount,
 			game.skySaturation,
@@ -199,6 +223,11 @@ func (game *Game) Update() error {
 		0,
 		config.MaxClouds,
 	)
+	game.sprites.eClouds.Num = utils.Clamp(
+		game.sprites.eClouds.Num,
+		0,
+		config.MaxClouds,
+	)
 	game.sprites.raindrops.Num = utils.Clamp(
 		game.sprites.raindrops.Num,
 		0,
@@ -206,16 +235,19 @@ func (game *Game) Update() error {
 	)
 
 	// Set the sky saturation and cloud opacity based on the time of day
+	co := game.cloudOpacity
+
 	switch time.Now().In(game.location).Hour() {
 	case 20, 21, 22, 23, 24, 0, 1, 2, 3, 4:
-		game.cloudOpacity = 0.5
+		co = game.cloudOpacity / 6
 		game.skySaturation = 0.5
 	}
 
-	game.sprites.aClouds.Update(game.forecast, game.cloudOpacity)
-	game.sprites.bClouds.Update(game.forecast, game.cloudOpacity)
-	game.sprites.cClouds.Update(game.forecast, game.cloudOpacity)
-	game.sprites.dClouds.Update(game.forecast, game.cloudOpacity)
+	game.sprites.aClouds.Update(game.forecast, co)
+	game.sprites.bClouds.Update(game.forecast, co)
+	game.sprites.cClouds.Update(game.forecast, co)
+	game.sprites.dClouds.Update(game.forecast, co)
+	game.sprites.eClouds.Update(game.forecast, co)
 
 	game.sprites.raindrops.Update(game.forecast)
 
@@ -223,44 +255,72 @@ func (game *Game) Update() error {
 }
 
 func (game *Game) Draw(screen *ebiten.Image) {
-	op := &ebiten.DrawImageOptions{}
-	op.ColorM.Reset()
-	op.ColorM.ChangeHSV(0, game.skySaturation, 1)
+	starsIntensity := 0.0
+	skyOp := &ebiten.DrawImageOptions{}
+	fogOp := &ebiten.DrawImageOptions{}
+
+	skyOp.ColorM.Reset()
+	fogOp.ColorM.Reset()
+
+	switch time.Now().In(game.location).Hour() {
+	case 21:
+		skyOp.ColorM.ChangeHSV(0, 0.9, game.skyBrightness)
+		starsIntensity = 0.1
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 22:
+		skyOp.ColorM.ChangeHSV(0, 0.6, game.skyBrightness)
+		starsIntensity = 0.3
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 23:
+		skyOp.ColorM.ChangeHSV(0, 0.4, game.skyBrightness)
+		starsIntensity = 0.6
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 0, 1, 2, 3:
+		skyOp.ColorM.ChangeHSV(0, 0.2, game.skyBrightness)
+		starsIntensity = 1.0
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 4:
+		skyOp.ColorM.ChangeHSV(0, 0.4, game.skyBrightness)
+		starsIntensity = 0.6
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 5:
+		skyOp.ColorM.ChangeHSV(0, 0.6, game.skyBrightness)
+		starsIntensity = 0.3
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	case 6:
+		skyOp.ColorM.ChangeHSV(0, 0.9, game.skyBrightness)
+		starsIntensity = 0.1
+		fogOp.CompositeMode = ebiten.CompositeModeXor
+	default:
+		skyOp.ColorM.ChangeHSV(0, 1, game.skyBrightness)
+		fogOp.ColorM.ChangeHSV(1, 1, 0.5)
+		fogOp.CompositeMode = ebiten.CompositeModeSourceAtop
+		starsIntensity = 0.0
+	}
+
 	screen.DrawImage(
 		game.skyImage,
-		op,
+		skyOp,
 	)
 
 	if game.isFoggy {
-		op := &ebiten.DrawImageOptions{}
-		op.ColorM.Reset()
-		switch time.Now().In(game.location).Hour() {
-		case 22, 23, 0, 1, 2, 3, 4, 5:
-			op.CompositeMode = ebiten.CompositeModeXor
-		default:
-			op.CompositeMode = ebiten.CompositeModeSourceAtop
-			op.ColorM.ChangeHSV(1, 1, 0.5)
-		}
-
 		screen.DrawImage(
 			game.fogImage,
-			op,
+			fogOp,
 		)
 	}
 
-	switch time.Now().In(game.location).Hour() {
-	case 22, 23, 0, 1, 2, 3, 4, 5: // TODO: set when stars are visible
-		screen.DrawRectShader(
-			config.WindowWidth,
-			config.WindowHeight,
-			game.Shaders[1], // stars
-			&ebiten.DrawRectShaderOptions{
-				Uniforms: map[string]interface{}{
-					"Time": float32(game.time) / 60,
-				},
+	screen.DrawRectShader(
+		config.WindowWidth,
+		config.WindowHeight,
+		game.Shaders[1], // stars
+		&ebiten.DrawRectShaderOptions{
+			Uniforms: map[string]interface{}{
+				"Time":      float32(game.time) / 60,
+				"Intensity": float32(starsIntensity),
 			},
-		)
-	}
+		},
+	)
 
 	screen.DrawRectShader(
 		config.WindowWidth,
@@ -282,6 +342,7 @@ func (game *Game) Draw(screen *ebiten.Image) {
 	game.sprites.bClouds.Draw(screen)
 	game.sprites.cClouds.Draw(screen)
 	game.sprites.dClouds.Draw(screen)
+	game.sprites.eClouds.Draw(screen)
 
 	game.sprites.raindrops.Draw(screen)
 

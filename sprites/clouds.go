@@ -28,8 +28,8 @@ func (cloud *Cloud) init() {
 
 	cloud.PosX = utils.Randf(-200, config.WindowWidth+200)
 	cloud.PosY = utils.Randf(-200, 200)
-	cloud.VelX = utils.Randf(0.5, 0.8)
-	cloud.Scale = utils.Randf(1, 2)
+	cloud.VelX = utils.Randf(0.1, 0.8)
+	cloud.Scale = utils.Randf(1, 1.5)
 }
 
 func (cloud *Cloud) Update(forecast models.DailyForecast, cloudOpacity float64) {
@@ -52,6 +52,7 @@ func (cloud *Cloud) Update(forecast models.DailyForecast, cloudOpacity float64) 
 	}
 	cloud.op.ColorM.Reset()
 	cloud.op.ColorM.Scale(1, 1, 1, cloudOpacity)
+	cloud.op.CompositeMode = ebiten.CompositeModeSourceOver // default
 }
 
 func (cloud *Cloud) Draw(screen *ebiten.Image) {

@@ -81,11 +81,12 @@ func DrawFog(fogTexture *ebiten.Image) *ebiten.Image {
 }
 
 // WeatherConditionIdToConfig returns number of raindrops and number of clouds
-func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness, cloudOpacity float64, isFoggy bool) {
+func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCloudsNum, eCloudsNum, raindropsNum, snowAmount int, skySaturation, skyBrightness, cloudOpacity float64, isFoggy bool) {
 	aCloudsNum = 0
 	bCloudsNum = 0
 	cCloudsNum = 0
 	dCloudsNum = 0
+	eCloudsNum = 0
 	snowAmount = 0
 	raindropsNum = 0
 	skySaturation = 1
@@ -96,258 +97,328 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	switch id {
 	// thunderstorm with light rain
 	case 200:
+		eCloudsNum = 16
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// thunderstorm with rain
 	case 201:
+		eCloudsNum = 16
 		raindropsNum = 100
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// thunderstorm with heavy rain
 	case 202:
+		eCloudsNum = 16
 		raindropsNum = 200
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// 210: light thunderstorm
 	case 210:
+		eCloudsNum = 16
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// 211: thunderstorm
 	case 211:
-		raindropsNum = 50
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 150
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// 212: heavy thunderstorm
 	case 212:
-		raindropsNum = 50
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 200
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// 221: ragged thunderstorm
 	case 221:
-		raindropsNum = 50
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 250
+		skySaturation = 0.3
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// 230: thunderstorm with light drizzle
 	case 230:
+		eCloudsNum = 16
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// thunderstorm with drizzle
 	case 231:
+		eCloudsNum = 16
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// thunderstorm with heavy drizzle
 	case 232:
+		eCloudsNum = 16
 		raindropsNum = 100
-		skySaturation = 0.2
+		skySaturation = 0.4
 		cloudOpacity = 0.5
 		isFoggy = true
 
 	// light intensity drizzle
 	case 300:
+		eCloudsNum = 16
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// drizzle
 	case 301:
-		raindropsNum = 50
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 75
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// heavy intensity drizzle
 	case 302:
+		eCloudsNum = 16
 		raindropsNum = 100
-		skySaturation = 0.2
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// light intensity drizzle rain
 	case 310:
-		raindropsNum = 100
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 50
+		skySaturation = 0.8
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// drizzle rain
 	case 311:
-		raindropsNum = 100
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 50
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// heavy intensity drizzle rain
 	case 312:
-		raindropsNum = 150
-		skySaturation = 0.2
+		eCloudsNum = 16
+		raindropsNum = 100
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// shower rain and drizzle
 	case 313:
-		raindropsNum = 250
-		skySaturation = 0.2
+		eCloudsNum = 24
+		raindropsNum = 200
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// heavy shower rain and drizzle
 	case 314:
-		raindropsNum = 250
-		skySaturation = 0.2
+		eCloudsNum = 24
+		raindropsNum = 512
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// shower drizzle
 	case 321:
-		raindropsNum = 250
-		skySaturation = 0.2
+		eCloudsNum = 24
+		raindropsNum = 200
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// light rain
 	case 500:
-		raindropsNum = 50
-		skySaturation = 0.2
+		eCloudsNum = 24
+		raindropsNum = 200
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// moderate rain
 	case 501:
-		raindropsNum = 100
-		skySaturation = 0.2
+		eCloudsNum = 24
+		raindropsNum = 300
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// heavy intensity rain
 	case 502:
-		raindropsNum = 250
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 512
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// very heavy rain
 	case 503:
-		raindropsNum = 450
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 512
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// extreme rain
 	case 504:
-		raindropsNum = 450
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 512
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// freezing rain
 	case 511:
-		raindropsNum = 450
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 512
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// light intensity shower rain
 	case 520:
+		eCloudsNum = 32
 		raindropsNum = 50
-		skySaturation = 0.2
+		skySaturation = 0.8
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// shower rain
 	case 521:
-		raindropsNum = 200
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 150
+		skySaturation = 0.8
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// heavy intensity shower rain
 	case 522:
-		raindropsNum = 450
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 300
+		skySaturation = 0.8
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// ragged shower rain
 	case 531:
-		raindropsNum = 450
-		skySaturation = 0.2
+		eCloudsNum = 32
+		raindropsNum = 300
+		skySaturation = 0.4
+		cloudOpacity = 0.5
 		isFoggy = true
 
 	// light snow
 	case 600:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 10
 
 	// snow
 	case 601:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 20
 
 	// heavy snow
 	case 602:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 20
 
 	// sleet
 	case 611:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 5
 		raindropsNum = 50
 
 	// light shower sleet
 	case 612:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 5
 		raindropsNum = 50
 
 	// shower sleet
 	case 613:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 5
 		raindropsNum = 50
 
 	// light rain and snow
 	case 615:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 10
 		raindropsNum = 50
 
 	// rain and snow
 	case 616:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 10
 		raindropsNum = 50
 
 	// light shower snow
 	case 620:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 20
 		raindropsNum = 100
 
 	// shower snow
 	case 621:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 20
 		raindropsNum = 100
 
 	// heavy shower snow
 	case 622:
+		eCloudsNum = 32
 		skySaturation = 0.2
+		cloudOpacity = 0.5
 		isFoggy = true
 		snowAmount = 30
 		raindropsNum = 100
@@ -359,30 +430,40 @@ func WeatherConditionIdToConfig(id int) (aCloudsNum, bCloudsNum, cCloudsNum, dCl
 	case 801:
 		aCloudsNum = 1
 		cloudOpacity = 0.5
+		eCloudsNum = 4
+		isFoggy = true
 
 	// scattered clouds 26-50%
 	case 802:
-		aCloudsNum = 2
+		aCloudsNum = 1
 		cloudOpacity = 0.5
+		eCloudsNum = 8
+		isFoggy = true
 
 	// broken clouds 51-84%
 	case 803:
-		aCloudsNum = 2
-		bCloudsNum = 3
-		cloudOpacity = 0.5
+		aCloudsNum = 1
+		aCloudsNum = 4
+		cCloudsNum = 4
+		eCloudsNum = 32
+		isFoggy = true
+		cloudOpacity = 0.6
 
 	// overcast clouds 85-100%
 	case 804:
-		skySaturation = 0.5
-		cloudOpacity = 0.2
+		aCloudsNum = 1
+		aCloudsNum = 12
+		cCloudsNum = 4
+		eCloudsNum = 32
 		isFoggy = true
-		cCloudsNum = 3
+		cloudOpacity = 0.6
 	}
 
 	return aCloudsNum,
 		bCloudsNum,
 		cCloudsNum,
 		dCloudsNum,
+		eCloudsNum,
 		raindropsNum,
 		snowAmount,
 		skySaturation,

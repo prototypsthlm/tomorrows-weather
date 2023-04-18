@@ -26,6 +26,7 @@ var (
 	bCloudTextures []*ebiten.Image
 	cCloudTextures []*ebiten.Image
 	dCloudTextures []*ebiten.Image
+	eCloudTextures []*ebiten.Image
 	skyTexture     *ebiten.Image
 	fogTexture     *ebiten.Image
 )
@@ -105,6 +106,7 @@ func init() {
 		bCloudTextures = append(bCloudTextures, texture)
 	}
 }
+
 func init() {
 	for i := 1; i <= 4; i++ {
 		raw, err := textures.Open(fmt.Sprintf("textures/3/%d.png", i))
@@ -124,6 +126,7 @@ func init() {
 		cCloudTextures = append(cCloudTextures, texture)
 	}
 }
+
 func init() {
 	for i := 1; i <= 3; i++ {
 		raw, err := textures.Open(fmt.Sprintf("textures/4/%d.png", i))
@@ -144,6 +147,26 @@ func init() {
 	}
 }
 
+func init() {
+	for i := 1; i <= 1; i++ {
+		raw, err := textures.Open(fmt.Sprintf("textures/5/%d.png", i))
+		if err != nil {
+			log.Fatal(err)
+		}
+		decoded, err := png.Decode(raw)
+		if err != nil {
+			log.Fatal(err)
+		}
+		image := ebiten.NewImageFromImage(decoded)
+		texture := ebiten.NewImage(image.Size())
+		texture.DrawImage(
+			image,
+			&ebiten.DrawImageOptions{},
+		)
+		eCloudTextures = append(eCloudTextures, texture)
+	}
+}
+
 func main() {
 	ebiten.SetWindowSize(
 		config.WindowWidth,
@@ -156,6 +179,7 @@ func main() {
 		BCloudTextures: bCloudTextures,
 		CCloudTextures: cCloudTextures,
 		DCloudTextures: dCloudTextures,
+		ECloudTextures: eCloudTextures,
 		SkyTexture:     skyTexture,
 		FogTexture:     fogTexture,
 	}); err != nil {
