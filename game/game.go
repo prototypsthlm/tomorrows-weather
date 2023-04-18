@@ -15,14 +15,8 @@ import (
 
 // Timișoara, Romania
 var (
-// lat = 45.7489
-// lon = 21.2087
-)
-
-var (
 	lat = 45.7489
-	lon = -41.2087
-	// lon = 21.2087
+	lon = 21.2087
 )
 
 type Game struct {
